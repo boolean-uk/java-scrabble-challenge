@@ -40,6 +40,7 @@ class ScrabbleTest {
         Assertions.assertEquals(22, scrabble.score());
     }
 
+    @Test
     void shouldScore41ForCaseInsensitiveWord() {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
