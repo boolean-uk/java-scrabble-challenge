@@ -42,22 +42,27 @@ And to total:
 
 ## Acceptance Criteria
 
-```js
-scrabble('') // should return 0
+```java
+Scrabble s = new Scrabble("");
+s.score(); // should return 0
 
-scrabble(" \t\n") // should return 0
+Scrabble s = new Scrabble(" \t\n");
+s.score(); // should return 0
 
-scrabble(null) // should return 0
+Scrabble s = new Scrabble("a");
+s.score(); // should return 1
 
-scrabble('a') // should return 1
+Scrabble s = new Scrabble("f");
+s.score(); // should return 4
 
-scrabble('f') // should return 4
+Scrabble s = new Scrabble("street");
+s.score(); // should return 6
 
-scrabble('street') // should return 6
+Scrabble s = new Scrabble("quirky");
+s.score(); // should return 22
 
-scrabble('quirky') // should return 22
-
-scrabble('OXYPHENBUTAZONE') // should return 41
+Scrabble s = new Scrabble("OXyPHEnBUTaZoNE");
+s.score(); // should return 41
 ```
 
 ## Extended Acceptance Criteria
