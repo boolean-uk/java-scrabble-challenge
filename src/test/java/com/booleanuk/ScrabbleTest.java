@@ -12,7 +12,7 @@ class ScrabbleTest {
 
     @Test
     public void shouldGive0ForWhiteSpace() {
-        Scrabble scrabble = new Scrabble(" \t\s");
+        Scrabble scrabble = new Scrabble("\n\r\t\b\f");
         Assertions.assertEquals(0, scrabble.score());
     }
 
