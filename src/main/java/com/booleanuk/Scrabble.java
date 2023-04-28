@@ -1,6 +1,8 @@
 package com.booleanuk;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class Scrabble {
@@ -39,16 +41,40 @@ public class Scrabble {
     }
 
 
-
     private boolean isEmpty() {
         return Objects.equals(stringToEvaluate.trim(), "");
     }
 
+
+    private int getMultiplerOpen(char c, int multi) {
+        int newMultiplyer = multi;
+        if (c == '{') {
+            newMultiplyer = multi * 2;
+        } else if (c == '[') {
+            newMultiplyer = multi * 3;
+        } else if (c == '}') {
+            newMultiplyer = multi / 2;
+        } else if (c == ']') {
+            newMultiplyer = multi / 3;
+        }
+        return newMultiplyer;
+    }
+
+
     private int getScore() {
         int scoreNumber = 0;
+        int multiplyer = 1;
+        List<Character> specialChar = Arrays.asList(new Character[]{'{', '[', '}', ']'});
         char[] charsToEvaluate = stringToEvaluate.toUpperCase().toCharArray();
         for (char c : charsToEvaluate) {
-            scoreNumber += values.get(c);
+            if (specialChar.contains(c)) {
+                multiplyer = getMultiplerOpen(c, multiplyer);
+                continue;
+            }
+            scoreNumber += values.get(c) * multiplyer;
+        }
+        if (multiplyer != 1) {
+            return 0;
         }
         return scoreNumber;
     }
