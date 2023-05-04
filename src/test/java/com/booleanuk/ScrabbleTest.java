@@ -61,17 +61,17 @@ class ScrabbleTest {
         Assertions.assertEquals(15, scrabble.score());
     }
     @Test
-    public void shouldScore0ForDogWithLessSpecialCharacter(){
+    public void shouldScore0ForDogWithIncorrectSpecialCharacter(){
         Scrabble scrabble = new Scrabble("dog]");
         Assertions.assertEquals(0, scrabble.score());
     }
     @Test
-    public void shouldScore15ForDogWithSpecialCharacter(){
+    public void shouldScore15ForDogWithWholeWordInSpecialCharacter(){
         Scrabble scrabble = new Scrabble("[dog]");
         Assertions.assertEquals(15, scrabble.score());
     }
     @Test
-    public void sshouldScore30ForDogWithSpecialCharacter(){
+    public void shouldScore30ForDogWithDoubleTheWordInSpecialCharacter(){
         Scrabble scrabble = new Scrabble("[{dog}]");
         Assertions.assertEquals(30, scrabble.score());
     }
