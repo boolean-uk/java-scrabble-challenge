@@ -28,7 +28,7 @@ public class Scrabble {
         }
     }
 
-    public boolean checkInput(String word) {
+    private boolean checkInput(String word) {
         String inputRegex = "[^a-zA-Z{}\\[\\]]";
         Pattern pattern = Pattern.compile(inputRegex, Pattern.CASE_INSENSITIVE);
 
@@ -41,7 +41,7 @@ public class Scrabble {
         return true;
     }
 
-    public int doubleTripleWord(String word) {
+    private int doubleTripleWord(String word) {
         if (word.charAt(0) == '{' && word.charAt(word.length() - 1) == '}' && word.charAt(2) != '}') {
             return 2;
         } else if (
@@ -55,7 +55,7 @@ public class Scrabble {
         }
     }
 
-    public int scoreLetters(String word) {
+    private int scoreLetters(String word) {
         int sum = 0;
         int letterMultiplier = 1;
 
