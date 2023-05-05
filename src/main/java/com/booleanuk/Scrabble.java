@@ -40,7 +40,7 @@ public class Scrabble {
             case 'k' -> 5;
             case 'j', 'x' -> 8;
             case 'q', 'z' -> 10;
-            default -> throw new IllegalArgumentException("Invalid character: " + c);
+            default -> 0;
         };
     }
 
