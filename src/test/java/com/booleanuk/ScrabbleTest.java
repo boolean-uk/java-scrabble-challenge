@@ -100,4 +100,14 @@ class ScrabbleTest {
         Scrabble s = new Scrabble("[Man]");
         Assertions.assertEquals(15, s.score());
     }
+    @Test
+    public void doubleTripleWord(){
+        Scrabble s = new Scrabble("{[Human]}"); //default score is 10, times 6 is 60
+        Assertions.assertEquals(60, s.score());
+    }
+    @Test
+    public void moreDoubleAndTripleValues(){
+        Scrabble s = new Scrabble("{Hum[an]}"); //6 points for a and n, and 18 points total for the other
+        Assertions.assertEquals(28, s.score());
+    }
 }
