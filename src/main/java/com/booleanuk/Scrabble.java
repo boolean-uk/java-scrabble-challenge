@@ -48,21 +48,16 @@ public class Scrabble {
         this.letterValues.put("X", 8);
         this.letterValues.put("Q", 10);
         this.letterValues.put("Z", 10);
-
-        if(this.wordToCalculate.equalsIgnoreCase(null)
-            || this.wordToCalculate.contains("\n")
-            || this.wordToCalculate.contains("\r")
-            || this.wordToCalculate.contains("\t")
-            || this.wordToCalculate.contains("\b")
-            || this.wordToCalculate.contains("\f")
-            || this.wordToCalculate.contains("\'")
-            || this.wordToCalculate.contains("\"")
-            || this.wordToCalculate.contains("\\")) {
-            return 0;
-        } else {
+        this.letterValues.put("{", 0);
+        this.letterValues.put("}", 0);
+        this.letterValues.put("[", 0);
+        this.letterValues.put("]", 0);
 
             for (int i = 0; i < this.wordToCalculate.length(); i++) {
-                this.characters.add(this.wordToCalculate.toUpperCase().substring(i, i+1));
+                String chr = this.wordToCalculate.toUpperCase().substring(i, i + 1);
+                if(this.letterValues.containsKey(chr)) {
+                    this.characters.add(chr);
+                }
             }
 
             for (String characterToEvaluate : characters) {
@@ -83,11 +78,9 @@ public class Scrabble {
                 points += this.letterValues.get(characterToEvaluate) * doublePoints * triplePoints;
             }
 
-            System.out.println("Your word scored " + points + " points");
             return points;
-        }
-    }
 
+    }
 
 
 }
