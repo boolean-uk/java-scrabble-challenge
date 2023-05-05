@@ -3,6 +3,8 @@ package com.booleanuk;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Scanner;
+
 class ScrabbleTest {
     @Test
     public void shouldGive0ForEmptyWords() {
@@ -44,5 +46,58 @@ class ScrabbleTest {
     public void shouldScore41ForCaseInsensitiveWord() {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
+    }
+    //my tests are under this comment
+
+    @Test
+    public void invalidUseOfBracketsOne(){
+        Scrabble s = new Scrabble("{dog");
+        Assertions.assertEquals(0, s.score());
+    }
+    @Test
+    public void invalidUseOfBracketsTwo(){
+        Scrabble s = new Scrabble("dog}");
+        Assertions.assertEquals(0, s.score());
+    }
+    @Test
+    public void invalidUseOfBracketsThree(){
+        Scrabble s = new Scrabble("[dog");
+        Assertions.assertEquals(0, s.score());
+    }
+    @Test
+    public void invalidUseOfBracketsFour(){
+        Scrabble s = new Scrabble("do]g");
+        Assertions.assertEquals(0, s.score());
+    }
+    @Test
+    public void shouldBeDoubleScore(){
+        Scrabble s = new Scrabble("{dog}");
+        Assertions.assertEquals(10, s.score());
+    }
+    @Test
+    public void shouldBeTripleScore(){
+        Scrabble s = new Scrabble("[dog]");
+        Assertions.assertEquals(15, s.score());
+    }
+    @Test
+    public void shouldBeDoubleScoreWithTripleLetter(){
+        Scrabble s = new Scrabble("{d[o]g}"); // 6 times the score for o, 2 times for d and g
+        Assertions.assertEquals(14, s.score());
+    }
+    @Test
+    public void shouldBeTripleScoreWtihDoubleLetter(){
+        Scrabble s = new Scrabble("[D{O}G]"); // 6 times o, and 3 times d and g.
+        Assertions.assertEquals(18, s.score());
+    }
+    @Test
+    public void numberInWord(){
+        Scrabble s = new Scrabble("{d0g}"); // if a word has a number in it, i expect the score to be 0
+        Assertions.assertEquals(0, s.score());
+    }
+    @Test
+    public void testRandomWord(){
+        //input any word here and change the expected value below
+        Scrabble s = new Scrabble("[Man]");
+        Assertions.assertEquals(15, s.score());
     }
 }
