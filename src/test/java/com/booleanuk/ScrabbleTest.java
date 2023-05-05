@@ -45,4 +45,40 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void shouldDoublePointsForO() {
+        Scrabble scrabble = new Scrabble("d{o}g");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+
+    @Test
+    public void shouldTriplePointsForO() {
+        Scrabble scrabble = new Scrabble("d[o]g");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+
+    @Test
+    public void shouldDoublePointsForDog() {
+        Scrabble scrabble = new Scrabble("{dog}");
+        Assertions.assertEquals(10, scrabble.score());
+    }
+
+    @Test
+    public void shouldTriplePointsForDog() {
+        Scrabble scrabble = new Scrabble("[dog]");
+        Assertions.assertEquals(15, scrabble.score());
+    }
+
+    @Test
+    public void shouldDoublePointsForOAndThenTriplePointsForDog() {
+        Scrabble scrabble = new Scrabble("[d{o}g]");
+        Assertions.assertEquals(18, scrabble.score());
+    }
+
+    @Test
+    public void shouldDisregardMixedBrackets() {
+        Scrabble scrabble = new Scrabble("[d{o]g}");
+        Assertions.assertEquals(5, scrabble.score());
+    }
 }
