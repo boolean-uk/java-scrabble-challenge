@@ -1,10 +1,8 @@
 package com.booleanuk;
 
-import java.util.Stack;
-import java.util.stream.Collectors;
-
 public class Scrabble {
     private final String word;
+
     public Scrabble(String word) {
         this.word = word.trim().toLowerCase();
     }
@@ -27,70 +25,69 @@ public class Scrabble {
     }
 
     private static int getCharValue(char c) {
-        return switch (c) {
-            case 'a', 'e', 'i', 'o', 'u', 'l', 'n', 'r', 's', 't'-> 1;
-            case 'd', 'g', '{', '}' -> 2;
-            case 'b', 'c', 'm', 'p', '[', ']' -> 3;
-            case 'f', 'h', 'v', 'w', 'y' -> 4;
-            case 'k' -> 5;
-            case 'j', 'x' -> 8;
-            case 'q', 'z' -> 10;
-            default -> 0;
-        };
+        int value = 0;
+        switch (c) {
+            case 'a':
+            case 'e':
+            case 'i':
+            case 'o':
+            case 'u':
+            case 'l':
+            case 'n':
+            case 'r':
+            case 's':
+            case 't':
+                value = 1;
+                break;
+            case 'd':
+            case 'g':
+            case '{':
+            case '}':
+                value = 2;
+                break;
+            case 'b':
+            case 'c':
+            case 'm':
+            case 'p':
+            case '[':
+            case ']':
+                value = 3;
+                break;
+            case 'f':
+            case 'h':
+            case 'v':
+            case 'w':
+            case 'y':
+                value = 4;
+                break;
+            case 'k':
+                value = 5;
+                break;
+            case 'j':
+            case 'x':
+                value = 8;
+                break;
+            case 'q':
+            case 'z':
+                value = 10;
+                break;
+            default:
+                value = 0;
+                break;
+        }
+        ;
+        return value;
     }
 
     public boolean isWordValidRegex() {
         String template = "([a-z]|\\{[a-z]\\}|\\[[a-z]\\])+";
-        boolean letterWrapPattern =  word.matches(template);
-        boolean wordCurly = word.matches("\\{"+template+"\\}");
-        boolean wordSquare = word.matches("\\["+template+"\\]");
-        boolean wordSquareTwice = word.matches("\\[{2}"+template+"\\]{2}");
-        boolean wordCurlyTwice = word.matches("\\{{2}"+template+"\\}{2}");
-        boolean wordCurlyThrice = word.matches("\\{{3}"+template+"\\}{3}");
+        boolean letterWrapPattern = word.matches(template);
+        boolean wordCurly = word.matches("\\{" + template + "\\}");
+        boolean wordSquare = word.matches("\\[" + template + "\\]");
+        boolean wordSquareTwice = word.matches("\\[{2}" + template + "\\]{2}");
+        boolean wordCurlyTwice = word.matches("\\{{2}" + template + "\\}{2}");
+        boolean wordCurlyThrice = word.matches("\\{{3}" + template + "\\}{3}");
         return letterWrapPattern || wordCurly || wordSquare
                 || wordSquareTwice || wordCurlyTwice || wordCurlyThrice;
-    }
-
-    @Deprecated /* Works */
-    public boolean isWordValid() {
-        boolean doubleBracketsAroundLetter = word.matches(".*[{\\[]{2}+[a-z][}\\]]{2}+.*");
-        if (doubleBracketsAroundLetter) return false;
-
-        Stack<Character> stack = new Stack<>();
-        Stack<Integer> chars = new Stack<>(); //Letters in Between Brackets
-        int numberOfLetters = word.replaceAll("[{}\\[\\]]", "").length();
-
-        for (char c : word.toCharArray()) {
-            switch (c) {
-                case '{', '[' -> {
-                    stack.push(c);
-                    chars.push(0);
-                }
-                case '}' -> {
-                    if (stack.isEmpty() || stack.peek() != '{' ||
-                            (chars.peek() != 1 && chars.peek() != numberOfLetters)) {
-                        return false;
-                    }
-                    stack.pop();
-                    chars.pop();
-                }
-                case ']' -> {
-                    if (stack.isEmpty() || stack.peek() != '[' ||
-                            (chars.peek() != 1 && chars.peek() != numberOfLetters)) {
-                        return false;
-                    }
-                    stack.pop();
-                    chars.pop();
-                }
-                default -> {
-                    if (Character.isLetter(c)) {
-                        chars = chars.stream().map(i -> i + 1).collect(Collectors.toCollection(Stack::new));
-                    } else {
-                        return false;
-                    }
-                }
-            }
-        }
-        return stack.isEmpty();
     }
 }
