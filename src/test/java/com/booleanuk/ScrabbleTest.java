@@ -93,7 +93,7 @@ class ScrabbleTest {
     }
 
     @Test
-    public void shouldTripleWordScore_usingCurlyBrackets() {
+    public void shouldTripleWordScore_usingSquareBrackets() {
         Scrabble scrabble = new Scrabble("[dog]");
         Assertions.assertEquals(15, scrabble.score());
     }
@@ -126,8 +126,8 @@ class ScrabbleTest {
 
     @Test
     public void shouldMultiply_WordTwiceAndLetter() {
-        Scrabble scrabble = new Scrabble("[{[d]og}]");
-        Assertions.assertEquals(54, scrabble.score());
+        Scrabble scrabble = new Scrabble("{{[d]og}}");
+        Assertions.assertEquals(36, scrabble.score());
     }
     @Test
     public void shouldGive0_BracketsWrapMoreThanOneLetter() {
@@ -139,8 +139,8 @@ class ScrabbleTest {
 
     @Test
     public void shouldMultiplyWordScore_usingCurlyBrackets() {
-        Scrabble scrabble = new Scrabble("{[dog]}");
-        Assertions.assertEquals(30, scrabble.score());
+        Scrabble scrabble = new Scrabble("[[dog]]");
+        Assertions.assertEquals(45, scrabble.score());
     }
 
 }

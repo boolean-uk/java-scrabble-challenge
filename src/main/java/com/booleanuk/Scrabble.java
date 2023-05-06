@@ -5,20 +5,16 @@ import java.util.stream.Collectors;
 
 public class Scrabble {
     private final String word;
-
     public Scrabble(String word) {
         this.word = word.trim().toLowerCase();
     }
 
     public int score() {
-        if (!isWordValid()) return 0;
-
-        int score = 0;
-        int multiplier = 1;
+        if (!isWordValidRegex()) return 0;
+        int score = 0, multiplier = 1;
 
         for (int i = 0; i < word.length(); i++) {
             char c = word.charAt(i);
-
             if (c >= 'a' && c <= 'z') {
                 score += getCharValue(c) * multiplier;
             } else if (c == '[' || c == '{') {
@@ -27,13 +23,12 @@ public class Scrabble {
                 multiplier /= getCharValue(c);
             }
         }
-        if (multiplier != 1) return 0;
         return score;
     }
 
     private static int getCharValue(char c) {
         return switch (c) {
-            case 'a', 'e', 'i', 'o', 'u', 'l', 'n', 'r', 's', 't' -> 1;
+            case 'a', 'e', 'i', 'o', 'u', 'l', 'n', 'r', 's', 't'-> 1;
             case 'd', 'g', '{', '}' -> 2;
             case 'b', 'c', 'm', 'p', '[', ']' -> 3;
             case 'f', 'h', 'v', 'w', 'y' -> 4;
@@ -44,6 +39,19 @@ public class Scrabble {
         };
     }
 
+    public boolean isWordValidRegex() {
+        String template = "([a-z]|\\{[a-z]\\}|\\[[a-z]\\])+";
+        boolean letterWrapPattern =  word.matches(template);
+        boolean wordCurly = word.matches("\\{"+template+"\\}");
+        boolean wordSquare = word.matches("\\["+template+"\\]");
+        boolean wordSquareTwice = word.matches("\\[{2}"+template+"\\]{2}");
+        boolean wordCurlyTwice = word.matches("\\{{2}"+template+"\\}{2}");
+        boolean wordCurlyThrice = word.matches("\\{{3}"+template+"\\}{3}");
+        return letterWrapPattern || wordCurly || wordSquare
+                || wordSquareTwice || wordCurlyTwice || wordCurlyThrice;
+    }
+
+    @Deprecated /* Works */
     public boolean isWordValid() {
         boolean doubleBracketsAroundLetter = word.matches(".*[{\\[]{2}+[a-z][}\\]]{2}+.*");
         if (doubleBracketsAroundLetter) return false;
