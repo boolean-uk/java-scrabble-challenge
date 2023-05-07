@@ -45,4 +45,46 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void shouldScore5ForDogWithoutMultiplier(){
+        Scrabble scrabble = new Scrabble("dog");
+        Assertions.assertEquals(5, scrabble.score());
+    }
+    @Test
+    public void shouldScore6ForDogWithDoubleCharacter(){
+        Scrabble scrabble = new Scrabble("d{o}g");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+    @Test
+    public void shouldScore9ForDogWithTripleCharacter(){
+        Scrabble scrabble = new Scrabble("[d]og");
+        Assertions.assertEquals(9, scrabble.score());
+    }
+    @Test
+    public void shouldScore10ForDogWithDoubleTripleScoreCharacter(){
+        Scrabble scrabble = new Scrabble("d[{o}]g");
+        Assertions.assertEquals(10, scrabble.score());
+    }
+    @Test
+    public void shouldScore10ForDogWithCurlyBrackets(){
+        Scrabble scrabble = new Scrabble("{dog}");
+        Assertions.assertEquals(10, scrabble.score());
+    }
+    @Test
+    public void shouldScore15ForDogWithSquaredBrackets(){
+        Scrabble scrabble = new Scrabble("[dog]");
+        Assertions.assertEquals(15, scrabble.score());
+    }
+    @Test
+    public void shouldScore30ForDogWithSquaredAndCurly(){
+        Scrabble scrabble = new Scrabble("[{dog}]");
+        Assertions.assertEquals(30, scrabble.score());
+    }
+    @Test
+    public void shouldScore0ForDogWithInvalidPattern(){
+        Scrabble scrabble = new Scrabble("do{g");
+        Assertions.assertEquals(0, scrabble.score());
+    }
+
 }
