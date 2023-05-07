@@ -7,10 +7,11 @@ public class Scrabble {
 
     String word;
 
-    public  Scrabble (String word){
+    public Scrabble(String word) {
         this.word = word;
     }
-    public  int score() {
+
+    public int score() {
         int score = 0;
         int multiplier = 1;
         boolean isValid = true;
@@ -23,7 +24,7 @@ public class Scrabble {
                 curlyCounter++;
                 multiplier *= 2;
             } else if (c == '}') {
-                if(curlyCounter == 0 ){
+                if (curlyCounter == 0) {
                     isValid = false;
                     break;
                 }
@@ -33,7 +34,7 @@ public class Scrabble {
                 squareCounter++;
                 multiplier *= 3;
             } else if (c == ']') {
-                if(squareCounter == 0 ){
+                if (squareCounter == 0) {
                     isValid = false;
                     break;
                 }
@@ -41,28 +42,54 @@ public class Scrabble {
                 multiplier /= 3;
             } else if (Character.isLetter(c)) {
                 switch (Character.toUpperCase(c)) {
-                    case 'A', 'E', 'I', 'O', 'U', 'L', 'N', 'R', 'S', 'T' ->
-                            score += multiplier;
-                    case 'D', 'G' ->
-                            score += 2 * multiplier;
-                    case 'B', 'C', 'M', 'P' ->
-                            score += 3 * multiplier;
-                    case 'F', 'H', 'V', 'W', 'Y' ->
-                            score += 4 * multiplier;
-                    case 'K' ->
-                            score += 5 * multiplier;
-                    case 'J', 'X' ->
-                            score += 8 * multiplier;
-                    case 'Q', 'Z' ->
-                            score += 10 * multiplier;
+                    case 'A':
+                    case 'E':
+                    case 'I':
+                    case 'O':
+                    case 'U':
+                    case 'L':
+                    case 'N':
+                    case 'R':
+                    case 'S':
+                    case 'T':
+                        score += multiplier;
+                        break;
+                    case 'D':
+                    case 'G':
+                        score += 2 * multiplier;
+                        break;
+                    case 'B':
+                    case 'C':
+                    case 'M':
+                    case 'P':
+                        score += 3 * multiplier;
+                        break;
+                    case 'F':
+                    case 'H':
+                    case 'V':
+                    case 'W':
+                    case 'Y':
+                        score += 4 * multiplier;
+                        break;
+                    case 'K':
+                        score += 5 * multiplier;
+                        break;
+                    case 'J':
+                    case 'X':
+                        score += 8 * multiplier;
+                        break;
+                    case 'Q':
+                    case 'Z':
+                        score += 10 * multiplier;
+                        break;
                 }
             }
         }
 
-        if(curlyCounter>0 || squareCounter>0){
+        if (curlyCounter > 0 || squareCounter > 0) {
             isValid = false;
         }
 
-        return isValid?score:0;
+        return isValid ? score : 0;
     }
 }
