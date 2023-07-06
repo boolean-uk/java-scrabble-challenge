@@ -33,6 +33,7 @@ public class Scrabble {
             // Check for triple letter score
             else if (i + 2 < word.length() && word.charAt(i) == '[' && word.charAt(i + 2) == ']') {
                 letterScore = letterValues.getOrDefault(word.charAt(i+1),0)*3;
+
                 i += 3; // Skip the square brackets
             } else {
                 i++;
