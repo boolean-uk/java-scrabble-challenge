@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ScrabbleTest {
+    // Core tests
     @Test
     public void shouldGive0ForEmptyWords() {
         Scrabble scrabble = new Scrabble("");
@@ -44,5 +45,51 @@ class ScrabbleTest {
     public void shouldScore41ForCaseInsensitiveWord() {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
+    }
+
+    // Extension Tests
+    @Test
+    public void doublePointsLetter(){
+        Scrabble scrabble = new Scrabble("d{o}g");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+    @Test
+    public void triplePointsLetter(){
+        Scrabble scrabble = new Scrabble("d[o]g");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+    @Test
+    public void doublePointsWord(){
+        Scrabble scrabble = new Scrabble("{dog}");
+        Assertions.assertEquals(10, scrabble.score());
+    }
+    @Test
+    public void triplePointsWord(){
+        Scrabble scrabble = new Scrabble("[dog]");
+        Assertions.assertEquals(15, scrabble.score());
+    }
+
+    @Test
+    public void mix(){
+        Scrabble scrabble = new Scrabble("[d]o{g}");
+        Assertions.assertEquals(11, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore65extension() {
+        Scrabble scrabble = new Scrabble("OXy{P}HEnBUTa[Z]oN{E}");
+        Assertions.assertEquals(65, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore10extension() {
+        Scrabble scrabble = new Scrabble("{dog}");
+        Assertions.assertEquals(10, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore57extension() {
+        Scrabble scrabble = new Scrabble("OXy{PHE}nBU[T]aZ[oNE]");
+        Assertions.assertEquals(57, scrabble.score());
     }
 }
