@@ -45,4 +45,46 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void shouldScore6forRosesWithDoubleLetter() {
+        Scrabble scrabble = new Scrabble("Ros{e}s");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore7forRosesWithTripleLetter(){
+        Scrabble scrabble = new Scrabble("[R]oses");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore10forRosesWithDoubleWordScore(){
+        Scrabble scrabble = new Scrabble("{Roses}");
+        Assertions.assertEquals(10, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore15forRosesWithTripleWordScore(){
+        Scrabble scrabble = new Scrabble("[Roses]");
+        Assertions.assertEquals(15, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore8forCombinationOfDoubleAndTripleLetterScore(){
+        Scrabble scrabble = new Scrabble("[R]o{s}es");
+        Assertions.assertEquals(8, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore18forRosesWithCombinationOfLetterScoreAndWordScore(){
+        Scrabble scrabble = new Scrabble("[Ro{s}es]");
+        Assertions.assertEquals(18, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore5forRosesWithWrongBrackets(){
+        Scrabble scrabble = new Scrabble("{R[o{se]s");
+        Assertions.assertEquals(5, scrabble.score());
+    }
 }
