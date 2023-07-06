@@ -39,10 +39,31 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("quirky");
         Assertions.assertEquals(22, scrabble.score());
     }
-
     @Test
     public void shouldScore41ForCaseInsensitiveWord() {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
+    }
+    @Test
+    public void shouldScore8ForDoubleGLetterInWordGood() {
+        Scrabble scrabble = new Scrabble("{g}ood");
+        Assertions.assertEquals(8, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore32ForTripleZLetterInWordZoo() {
+        Scrabble scrabble = new Scrabble("[z]oo");
+        Assertions.assertEquals(32, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore12ForStreetDoubleWord() {
+        Scrabble scrabble = new Scrabble("{Street}");
+        Assertions.assertEquals(12, scrabble.score());
+    }
+    @Test
+    public void shouldScore18ForStreetTripleWord() {
+        Scrabble scrabble = new Scrabble("[Street]");
+        Assertions.assertEquals(18, scrabble.score());
     }
 }
