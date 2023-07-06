@@ -15,7 +15,6 @@ public class Scrabble {
 
         if (this.word.contains("{")) {
             StringBuilder stringBuilder = new StringBuilder(this.word.substring(this.word.indexOf("{") + 1, this.word.indexOf("}")));
-
             for (Character letter : stringBuilder.toString().toUpperCase().toCharArray()) {
                 if (mapPoints.points.containsKey(letter)){
                     result += mapPoints.points.get(letter) * 2;
