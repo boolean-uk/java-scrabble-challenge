@@ -45,4 +45,51 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    // Extended tests
+
+    @Test
+    public void shouldScore6ForDoubleOInDog() {
+        Scrabble scrabble = new Scrabble("d{o}g");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore7ForTripleOInDog() {
+        Scrabble scrabble = new Scrabble("d[o]g");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+    @Test
+    public void shouldScore10ForDoubleDog() {
+        Scrabble scrabble = new Scrabble("{dog}");
+        Assertions.assertEquals(10, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore15ForTripleDog() {
+        Scrabble scrabble = new Scrabble("[dog]");
+        Assertions.assertEquals(15, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore18ForTripleDogWithDoubleO() {
+        Scrabble scrabble = new Scrabble("[d{o}g]");
+        Assertions.assertEquals(18, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore14ForDoubleDogWithTripleO() {
+        Scrabble scrabble = new Scrabble("{d[o]g}");
+        Assertions.assertEquals(14, scrabble.score());
+    }
+
+    @Test
+    public void shouldThrowForBadBrackets() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Scrabble("[]dog]"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Scrabble("}{dog}"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Scrabble("{}}{{}"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Scrabble("[]][[]"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Scrabble("{]"));
+    }
+
 }
