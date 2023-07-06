@@ -45,4 +45,56 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void shouldScore15ForTripleWord() {
+        Scrabble scrabble = new Scrabble("[dog]");
+        Assertions.assertEquals(15, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore9ForTripleLetter() {
+        Scrabble scrabble = new Scrabble("[c]");
+        Assertions.assertEquals(9, scrabble.score());
+    }
+    @Test
+    public void shouldScore6ForDoubleLetter() {
+        Scrabble scrabble = new Scrabble("{c}");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore6ForDoubleWord(){
+        Scrabble scrabble = new Scrabble("{dog}");
+        Assertions.assertEquals(10, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore24ForDoubleWordAndTripleLetter(){
+        Scrabble scrabble = new Scrabble("{dog}an[D]{ant}");
+        Assertions.assertEquals(24, scrabble.score());
+    }
+
+    @Test
+    void shouldScore5NotClosedCurlyBracket(){
+        Scrabble scrabble = new Scrabble("{dog");
+        Assertions.assertEquals(5, scrabble.score());
+    }
+
+    @Test
+    void shouldScore5NotClosedSquaredBracket(){
+        Scrabble scrabble = new Scrabble("[dog");
+        Assertions.assertEquals(5, scrabble.score());
+    }
+    @Test
+    void shouldScore10ForTwiceDoubleBracket(){
+        Scrabble scrabble = new Scrabble("{dog}{dog}");
+        Assertions.assertEquals(20, scrabble.score());
+    }
+
+    @Test
+    void shouldScore8NotClosedBracket(){
+        Scrabble scrabble = new Scrabble("[dog{ant");
+        Assertions.assertEquals(8, scrabble.score());
+    }
 }
