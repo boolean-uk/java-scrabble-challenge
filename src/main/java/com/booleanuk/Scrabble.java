@@ -13,7 +13,7 @@ public class Scrabble {
             letterValues.put(letters[i], values[i]);
         }
     }
-    private String word;
+    private final String word;
 
     public Scrabble(String word) {
         this.word = word;
