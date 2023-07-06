@@ -1,15 +1,17 @@
 package com.booleanuk;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.util.Arrays.asList;
 
 public class Scrabble {
 
     private static final Map<Character, Integer> lookup;
-    private final String word;
-
+    private String word;
+    private static final String CURLY_BRACKETS = "\\{(\\w+)}";
+    private static final String SQUARE_BRACKETS = "\\[(\\w+)]";
 
     static {
         lookup = new HashMap<>();
@@ -26,13 +28,40 @@ public class Scrabble {
         this.word = word.trim().toUpperCase();
     }
 
-    public int score() {
-        if (word.isBlank() || word.isEmpty()) {
-            return 0;
+    private List<Character> multiplyExtraScoredLetters(String regex, int multiplier) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(word);
+        List<Character> list = new ArrayList<>();
+
+        while (matcher.find()) {
+            String match = matcher.group(0);
+            String letter = matcher.group(1);
+            List<Character> chars = letter.chars().mapToObj(l -> (char) l).toList();
+            for (int i = 0; i < multiplier; i++) {
+                list.addAll(chars);
+            }
+            word = word.replace(match, "");
         }
-        return word
-                .chars()
-                .reduce(0, (score, letter) -> score + lookup.get((char) letter));
+        return list;
     }
 
+    private List<Character> listOfChars() {
+        List<Character> list = new ArrayList<>();
+        list.addAll(multiplyExtraScoredLetters(CURLY_BRACKETS, 2));
+        list.addAll(multiplyExtraScoredLetters(SQUARE_BRACKETS, 3));
+        list.addAll(multiplyExtraScoredLetters("(.*)", 1));
+        return list;
+    }
+
+    public int score() {
+        if (word.isBlank() || word.isEmpty() || word.equals("{}") || word.equals("[]")) {
+            return 0;
+        }
+        List<Character> list = listOfChars();
+
+        return list
+                .stream()
+                .mapToInt(lookup::get)
+                .sum();
+    }
 }
