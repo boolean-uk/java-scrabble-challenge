@@ -1,5 +1,6 @@
 package com.booleanuk;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,9 +43,21 @@ public class Scrabble {
     public int score() {
         String[] tab = this.word.split("");
         int score = 0;
-        for (String letter : tab) {
-            score += valueMap.getOrDefault(letter.toLowerCase(), 0);
+        int multiply = 1;
+
+        if (tab[0].equals("{") && tab[tab.length - 1].equals("}")) multiply = 2;
+        else if (tab[0].equals("[") && tab[tab.length - 1].equals("]")) multiply = 3;
+
+        for (int i = 0; i < tab.length; i++) {
+            if (tab[i].equals("{") && tab[i + 2].equals("}")) {
+                score += valueMap.getOrDefault(tab[i + 1].toLowerCase(), 0) * 2;
+                i += 2;
+            } else if (tab[i].equals("[") && tab[i + 2].equals("]")) {
+                score += valueMap.getOrDefault(tab[i + 1].toLowerCase(), 0) * 3;
+                i += 2;
+            } else
+                score += valueMap.getOrDefault(tab[i].toLowerCase(), 0);
         }
-        return score;
+        return score * multiply;
     }
 }
