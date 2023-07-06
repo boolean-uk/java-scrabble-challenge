@@ -45,4 +45,60 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void shouldTripleScoreIfStartAndFinishWithSquareBrace() {
+        Scrabble scrabble = new Scrabble("[street]");
+        Assertions.assertEquals(18, scrabble.score());
+    }
+
+    @Test
+    public void shouldSkipSquareBracesIfTheyDontMatchToPair() {
+        Scrabble scrabble = new Scrabble("]street[");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+
+    @Test
+    public void shouldDoubleScoreIfStartAndFinishWithSquareBrace() {
+        Scrabble scrabble = new Scrabble("{street}");
+        Assertions.assertEquals(12, scrabble.score());
+    }
+
+    @Test
+    public void shouldSkipCurlyBracesIfTheyDontMatchToPair() {
+        Scrabble scrabble = new Scrabble("}street{");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+
+    @Test
+    public void shouldPointCharacterAsDouble() {
+        Scrabble scrabble = new Scrabble("{s}treet");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+
+    @Test
+    public void shouldPointCharacterAsTriple() {
+        Scrabble scrabble = new Scrabble("[s]treet");
+        Assertions.assertEquals(8, scrabble.score());
+    }
+
+    @Test
+    public void shouldPointCharacterAsTripleAndDoubleInOneWord() {
+        Scrabble scrabble = new Scrabble("[s]t{r}eet");
+        Assertions.assertEquals(9, scrabble.score());
+    }
+
+    @Test
+    public void shouldSkipDoublingCharacterWhenThereIsNoClosingBrace() {
+        Scrabble scrabble = new Scrabble("{street");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+
+    @Test
+    public void shouldDoubleTwoCharactersNextToEachOtherWhenBothBraced() {
+        Scrabble scrabble = new Scrabble("{st}reet");
+        Assertions.assertEquals(8, scrabble.score());
+    }
+
+
 }
