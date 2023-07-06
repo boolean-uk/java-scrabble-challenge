@@ -58,8 +58,58 @@ public class Scrabble {
         return score;
     }
 
+    public int extendedScore() {
+        word = word.toLowerCase();
+        int score = 0;
+        for (int i = 0; i < word.length(); i++) {
+            if (word.charAt(i) == '[') {
+                for (int j = i; j < word.length(); j++) {
+                    if (word.charAt(j) == ']') {
+                        score += scorePart(word.substring(i, j + 1)) * 3;
+                        word = word.replace(word.substring(i, j + 1), "   ");
+
+                    }
+                }
+
+            }
+            if (word.charAt(i) == '{') {
+                for (int j = i; j < word.length(); j++) {
+                    if (word.charAt(j) == '}') {
+                        score += scorePart(word.substring(i, j + 1)) * 2;
+                        word = word.replace(word.substring(i, j + 1), "   ");
+
+                    }
+                }
+            }
 
 
+        }
+        if (word.length() != 0) {
+
+            score += scorePart(word);
+        }
+        return score;
+
+    }
+
+    public static void main(String[] args) {
+        Scrabble scrabble = new Scrabble("d[o]g");
+        System.out.println(scrabble.extendedScore());
+        System.out.println(scrabble.word.substring(1, 4));
+    }
+
+
+    public int scorePart(String partWord) {
+        partWord = partWord.toLowerCase();
+        int score = 0;
+        for (int i = 0; i < partWord.length(); i++) {
+            if (points.containsKey(partWord.charAt(i))) {
+                score += points.get(partWord.charAt(i));
+            }
+        }
+
+        return score;
+    }
 
 
 }

@@ -46,11 +46,46 @@ class ScrabbleTest {
         Assertions.assertEquals(41, scrabble.score());
     }
 
-  /*  @Test
-    public void shouldExtendedScoreForBracketDog(){
+    @Test
+    public void shouldExtendedScore15ForBracketDog(){
         //when
         Scrabble scrabble = new Scrabble("[dog]");
         //then
-        Assertions.assertEquals(14,scrabble.extendedScore());
-    }*/
+        Assertions.assertEquals(15,scrabble.extendedScore());
+    }
+
+    @Test
+    public void shouldExtendedScore7ForBracketDog(){
+        //when
+        Scrabble scrabble = new Scrabble("d[o]g");
+        //then
+        Assertions.assertEquals(7,scrabble.extendedScore());
+    }
+
+    @Test
+    public void shouldExtendedScore9ForBracketLetterGinDog(){
+        //when
+        Scrabble scrabble = new Scrabble("do[g]");
+        //then
+        Assertions.assertEquals(9,scrabble.extendedScore());
+    }
+
+    @Test
+    public void shouldExtendedScoreForBracketLetterGinDog(){
+        //when
+        Scrabble scrabble = new Scrabble("do{g}");
+        //then
+        Assertions.assertEquals(7,scrabble.extendedScore());
+    }
+
+    @Test
+    public void shouldExtendedScore10ForBracketLetterDog(){
+        //when
+        Scrabble scrabble = new Scrabble("{dog}");
+        //then
+        Assertions.assertEquals(10,scrabble.extendedScore());
+    }
+
+
 }
+
