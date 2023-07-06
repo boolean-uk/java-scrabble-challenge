@@ -113,4 +113,47 @@ class ScrabbleTest {
         scrabble = new Scrabble("===**dog");
         Assertions.assertEquals(0, scrabble.score());
     }
+
+    @Test
+    public void shouldScore2forDoubleA() {
+        Scrabble scrabble = new Scrabble("{a}");
+        Assertions.assertEquals(2, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore3forTripleA() {
+        Scrabble scrabble = new Scrabble("[a]");
+        Assertions.assertEquals(3, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore5forDoubleAAndTripleA() {
+        Scrabble scrabble = new Scrabble("{a}[a]");
+        Assertions.assertEquals(5, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore123ForTripleCaseInsensitiveWord() {
+        Scrabble scrabble = new Scrabble("[OXyPHEnBUTaZoNE]");
+        Assertions.assertEquals(123, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore4ForDoubleWordWithDoubleLetter() {
+        Scrabble scrabble = new Scrabble("{{a}}");
+        Assertions.assertEquals(4, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore9ForTripleWordWithTripleLetter() {
+        Scrabble scrabble = new Scrabble("[[a]]");
+        Assertions.assertEquals(9, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore183ForTripleCaseInsensitiveWord() {
+        Scrabble scrabble = new Scrabble("[OXyPHEnBUTa[Z]oNE]");
+        Assertions.assertEquals(183, scrabble.score());
+    }
+
 }
