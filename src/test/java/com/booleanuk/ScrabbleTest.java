@@ -45,4 +45,12 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+  /*  @Test
+    public void shouldExtendedScoreForBracketDog(){
+        //when
+        Scrabble scrabble = new Scrabble("[dog]");
+        //then
+        Assertions.assertEquals(14,scrabble.extendedScore());
+    }*/
 }
