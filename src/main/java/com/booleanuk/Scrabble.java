@@ -23,27 +23,26 @@ public class Scrabble {
 
             switch (character) {
                 case '{' -> {
-                    if (!isWordDoubled() & this.word.contains("}")) this.multiplier = DOUBLE_MULTIPLIER;
+                    if (isCharacterMarkedAsDoubled()) this.multiplier = DOUBLE_MULTIPLIER;
                 }
                 case '[' -> {
-                    if (!isWordTripled() & this.word.contains("]")) this.multiplier = TRIPLE_MULTIPLIER;
+                    if (isCharacterMarkedAsTripled()) this.multiplier = TRIPLE_MULTIPLIER;
                 }
                 case '}', ']' -> this.multiplier = BASE_MULTIPLIER;
                 default -> this.score += getCharacterPoints(character) * this.multiplier;
             }
         }
 
-        if (isWordDoubled()) {
+        if (isWordMarkedAsDoubled()) {
             return this.score * DOUBLE_MULTIPLIER;
         }
 
-        if (isWordTripled()) {
+        if (isWordMarkedAsTripled()) {
             return this.score * TRIPLE_MULTIPLIER;
         }
 
         return this.score;
     }
-
 
     int getCharacterPoints(char character) {
         return switch (character) {
@@ -58,11 +57,19 @@ public class Scrabble {
         };
     }
 
-    private boolean isWordTripled() {
+    private boolean isCharacterMarkedAsTripled() {
+        return !isWordMarkedAsTripled() & this.word.contains("]");
+    }
+
+    private boolean isCharacterMarkedAsDoubled() {
+        return !isWordMarkedAsDoubled() & this.word.contains("}");
+    }
+
+    private boolean isWordMarkedAsTripled() {
         return this.word.startsWith("[") && this.word.endsWith("]");
     }
 
-    private boolean isWordDoubled() {
+    private boolean isWordMarkedAsDoubled() {
         return this.word.startsWith("{") && this.word.endsWith("}");
     }
 }
