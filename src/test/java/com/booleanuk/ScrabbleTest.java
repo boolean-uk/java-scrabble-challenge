@@ -67,7 +67,7 @@ class ScrabbleTest {
     @Test
     public void shouldScore44ForDoubleQuirky() {
         Scrabble scrabble = new Scrabble("{quirky}");
-        Assertions.assertEquals(22, scrabble.score());
+        Assertions.assertEquals(44, scrabble.score());
     }
 
     @Test
@@ -92,5 +92,29 @@ class ScrabbleTest {
     public void shouldScore183ForTripleCaseInsensitiveWord() {
         Scrabble scrabble = new Scrabble("[OXyPHEnBUTa[Z]oNE]");
         Assertions.assertEquals(183, scrabble.score());
+    }
+
+    @Test
+    public void shouldNotCountDoubleWord() {
+        Scrabble scrabble = new Scrabble("{a}aaa{a}");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+
+    @Test
+    public void shouldNotCountTripleWord() {
+        Scrabble scrabble = new Scrabble("[a]aaa[a]");
+        Assertions.assertEquals(9, scrabble.score());
+    }
+
+    @Test
+    public void shouldThrowExceptionForInvalidWord() {
+        Scrabble scrabble = new Scrabble("a{aa}");
+        Assertions.assertThrows(IllegalArgumentException.class, scrabble::score);
+    }
+
+    @Test
+    public void shouldThrowExceptionForInvalidWord2() {
+        Scrabble scrabble = new Scrabble("a{a");
+        Assertions.assertThrows(IllegalArgumentException.class, scrabble::score);
     }
 }

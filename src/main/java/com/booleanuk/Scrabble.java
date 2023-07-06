@@ -8,11 +8,17 @@ public class Scrabble {
     }
 
     public boolean checkIfWordIsTriple(String word) {
+        if (word.length() < 3) {
+            return false;
+        }
         return word.charAt(0) == '[' && word.charAt(word.length() - 1) == ']'
                 && word.charAt(word.length() - 3) != '[';
     }
 
     public boolean checkIfWordIsDouble(String word) {
+        if (word.length() < 3) {
+            return false;
+        }
         return word.charAt(0) == '{' && word.charAt(word.length() - 1) == '}'
                 && word.charAt(word.length() - 3) != '{';
     }
@@ -28,7 +34,9 @@ public class Scrabble {
 
         boolean tripleLetter = false;
         boolean doubleLetter = false;
-        for (char letter : upperCaseWord.toCharArray()) {
+        char[] letters = upperCaseWord.toCharArray();
+        for (int i = 0; i < letters.length; i++) {
+            char letter = letters[i];
             int letterScore = 0;
             switch (letter) {
                 case 'A', 'E', 'I', 'O', 'U', 'L', 'N', 'R', 'S', 'T' -> letterScore = 1;
@@ -42,6 +50,14 @@ public class Scrabble {
                 case '{' -> doubleLetter = true;
                 case ']' -> tripleLetter = false;
                 case '}' -> doubleLetter = false;
+            }
+            if (doubleLetter && letter != '{' && (i + 1 == letters.length ||
+                    letters[i + 1] != '}')) {
+                throw new IllegalArgumentException("Invalid word");
+            }
+            if (tripleLetter && letter != '[' && (i + 1 == letters.length ||
+                    letters[i + 1] != ']')) {
+                throw new IllegalArgumentException("Invalid word");
             }
 
             score += tripleLetter ? letterScore * 3 :
