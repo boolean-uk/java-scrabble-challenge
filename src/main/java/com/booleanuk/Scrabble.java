@@ -44,7 +44,7 @@ public class Scrabble {
         for (int i = 0; i < word.length(); i++) {
             char character = word.charAt(i);
             if (!Character.isLetter(character) && character != '{' &&
-                    character != '}' && character != '[' && character != ']' && Character.isDigit(character)) {
+                    character != '}' && character != '[' && character != ']' || Character.isDigit(character)) {
                 return true;
             }
         }
