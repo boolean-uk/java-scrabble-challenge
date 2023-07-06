@@ -1,5 +1,6 @@
 package com.booleanuk;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Scrabble {
@@ -41,13 +42,21 @@ public class Scrabble {
     }
 
     public int score() {
-        int score = 0;
         if(word.trim().length() == 0)
             return 0;
-
         HashMap<Character, Integer> map = getMap();
+        int score = 0;
+        int multiplier = 1;
+
         for(Character letter: word.toCharArray()) {
-            score += map.get(Character.toUpperCase(letter));
+            switch (letter) {
+                case '{' -> multiplier = 2;
+                case '[' -> multiplier = 3;
+                case '}', ']' -> multiplier = 1;
+            }
+
+            if(map.containsKey(Character.toUpperCase(letter)))
+                score += map.get(Character.toUpperCase(letter)) * multiplier;
         }
         return score;
     }
