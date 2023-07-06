@@ -39,10 +39,25 @@ public class Scrabble {
     }
 
     public int score(){
+        int multipleScoreBy = 1;
         char[] arrayOfChars = this.wordToCalculate.toCharArray();
-        for (char c : arrayOfChars){
+
+        for (char c: arrayOfChars){
+            if (c == '{'){
+                multipleScoreBy = 2;
+                continue;
+            }
+            else if (c == '[') {
+                multipleScoreBy = 3;
+                continue;
+            }
+            else if (c == '}' || c == ']') {
+                multipleScoreBy = 1;
+                continue;
+            }
+
             if (pointsForLetters.containsKey(c)){
-                this.score += pointsForLetters.get(c);
+                score += multipleScoreBy * pointsForLetters.get(c);
             }
         }
         return score;
