@@ -56,6 +56,24 @@ class ScrabbleTest {
         Assertions.assertEquals(15, scrabble.score());
     }
 
+    @Test
+    public void shouldScore6(){
+        Scrabble scrabble = new Scrabble("d{o}g");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+    @Test
+    public void shouldScore7(){
+        Scrabble scrabble = new Scrabble("d[o]g");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+    @Test
+    public void shouldScore11(){
+        Scrabble scrabble = new Scrabble("[d]o{g}");
+        Assertions.assertEquals(11, scrabble.score());
+    }
+
+
+
 
 
 

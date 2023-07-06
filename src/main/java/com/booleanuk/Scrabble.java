@@ -48,7 +48,6 @@ public class Scrabble {
         String trimmedWord = word.trim().toUpperCase();
         int wordMultiplier = 1;
 
-
         if (trimmedWord.startsWith("{") && trimmedWord.endsWith("}")) {
             trimmedWord = trimmedWord.substring(1, trimmedWord.length() - 1);
             wordMultiplier = 2;
@@ -61,24 +60,19 @@ public class Scrabble {
             char c = trimmedWord.charAt(i);
             int letterMultiplier = 1;
 
-
-            if (i < trimmedWord.length() - 1 && trimmedWord.charAt(i + 1) == '{') {
+            if (i > 0 && trimmedWord.charAt(i - 1) == '{') {
                 letterMultiplier = 2;
-            } else if (i < trimmedWord.length() - 1 && trimmedWord.charAt(i + 1) == '[') {
+            } else if (i > 0 && trimmedWord.charAt(i - 1) == '[') {
                 letterMultiplier = 3;
             }
 
             score += letterValues.getOrDefault(c, 0) * letterMultiplier;
         }
 
-
-        if (trimmedWord.length() > 1 && (trimmedWord.charAt(trimmedWord.length() - 2) == '{' || trimmedWord.charAt(trimmedWord.length() - 2) == '[')) {
-            char lastChar = trimmedWord.charAt(trimmedWord.length() - 1);
-            score += letterValues.getOrDefault(lastChar, 0);
-        }
-
         return score * wordMultiplier;
     }
+
+
 
     public static void main(String[] args) {
         Scrabble s = new Scrabble("");
