@@ -45,4 +45,31 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void doublePointsWord(){
+        Scrabble scrabble = new Scrabble("{dog}");
+        Assertions.assertEquals(10, scrabble.score());
+    }
+    @Test
+    public void triplePointsWord(){
+        Scrabble scrabble = new Scrabble("[dog]");
+        Assertions.assertEquals(15, scrabble.score());
+    }
+    @Test
+    public void doublePointsLetter(){
+        Scrabble scrabble = new Scrabble("d{o}g");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+    @Test
+    public void triplePointsLetter(){
+        Scrabble scrabble = new Scrabble("d[o]g");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+    @Test
+    public void mix(){
+        Scrabble scrabble = new Scrabble("[d]o{g}");
+        Assertions.assertEquals(11, scrabble.score());
+    }
+
 }
