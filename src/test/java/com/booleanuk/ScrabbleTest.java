@@ -66,4 +66,5 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("[d]o{g}");
         Assertions.assertEquals(11, scrabble.score());
     }
+
 }
