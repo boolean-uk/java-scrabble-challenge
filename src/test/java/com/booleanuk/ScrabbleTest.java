@@ -45,4 +45,42 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void shouldScore6ForDoubleLetter(){
+        Scrabble scrabble = new Scrabble("d{o}g");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+    @Test
+    public void shouldScore10ForDoubleWord(){
+        Scrabble scrabble = new Scrabble("{dog}");
+        Assertions.assertEquals(10, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore15ForTripleWord(){
+        Scrabble scrabble = new Scrabble("[dog]");
+        Assertions.assertEquals(15, scrabble.score());
+    }
+    @Test
+    public void shouldScore12ForDoubleWordWithDoubleLetterInIt(){
+        Scrabble scrabble = new Scrabble("{d{o}g}");
+        Assertions.assertEquals(12, scrabble.score());
+    }
+    @Test
+    public void shouldScore14ForDoubleWordWithTripleLetterInIt(){
+        Scrabble scrabble = new Scrabble("{d[o]g}");
+        Assertions.assertEquals(14, scrabble.score());
+    }
+    @Test
+    public void shouldScore18ForTripleWordWithDoubleLetterInIt(){
+        Scrabble scrabble = new Scrabble("[d{o}g]");
+        Assertions.assertEquals(18, scrabble.score());
+    }
+    @Test
+    public void shouldScore21ForTripleWordWithTripleLetterInIt(){
+        Scrabble scrabble = new Scrabble("[d[o]g]");
+        Assertions.assertEquals(21, scrabble.score());
+    }
+
 }
