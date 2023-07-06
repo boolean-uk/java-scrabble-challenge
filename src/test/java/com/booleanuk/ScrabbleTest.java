@@ -45,4 +45,76 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void shouldScore2forDoubleA() {
+        Scrabble scrabble = new Scrabble("{a}");
+        Assertions.assertEquals(2, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore3forTripleA() {
+        Scrabble scrabble = new Scrabble("[a]");
+        Assertions.assertEquals(3, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore5forDoubleAAndTripleA() {
+        Scrabble scrabble = new Scrabble("{a}[a]");
+        Assertions.assertEquals(5, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore44ForDoubleQuirky() {
+        Scrabble scrabble = new Scrabble("{quirky}");
+        Assertions.assertEquals(44, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore123ForTripleCaseInsensitiveWord() {
+        Scrabble scrabble = new Scrabble("[OXyPHEnBUTaZoNE]");
+        Assertions.assertEquals(123, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore4ForDoubleWordWithDoubleLetter() {
+        Scrabble scrabble = new Scrabble("{{a}}");
+        Assertions.assertEquals(4, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore9ForTripleWordWithTripleLetter() {
+        Scrabble scrabble = new Scrabble("[[a]]");
+        Assertions.assertEquals(9, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore183ForTripleCaseInsensitiveWord() {
+        Scrabble scrabble = new Scrabble("[OXyPHEnBUTa[Z]oNE]");
+        Assertions.assertEquals(183, scrabble.score());
+    }
+
+    @Test
+    public void shouldNotCountDoubleWord() {
+        Scrabble scrabble = new Scrabble("{a}aaa{a}");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+
+    @Test
+    public void shouldNotCountTripleWord() {
+        Scrabble scrabble = new Scrabble("[a]aaa[a]");
+        Assertions.assertEquals(9, scrabble.score());
+    }
+
+    @Test
+    public void shouldThrowExceptionForInvalidWord() {
+        Scrabble scrabble = new Scrabble("a{aa}");
+        Assertions.assertThrows(IllegalArgumentException.class, scrabble::score);
+    }
+
+    @Test
+    public void shouldThrowExceptionForInvalidWord2() {
+        Scrabble scrabble = new Scrabble("a{a");
+        Assertions.assertThrows(IllegalArgumentException.class, scrabble::score);
+    }
 }
