@@ -45,4 +45,38 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    // tests for extension
+    @Test
+    public void shouldThrowExceptionIfWordInvalid() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Scrabble("{a"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Scrabble("{{a}"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Scrabble("}a"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Scrabble("[a"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Scrabble("][a"));
+    }
+
+    @Test
+    public void shouldScoreWordWithDoubleLettersCorrectly() {
+        Scrabble scrabble = new Scrabble("{a}aa");
+        Assertions.assertEquals(4, scrabble.score());
+    }
+
+    @Test
+    public void shouldScoreWordWithTripleLettersCorrectly() {
+        Scrabble scrabble = new Scrabble("[a]aa");
+        Assertions.assertEquals(5, scrabble.score());
+    }
+
+    @Test
+    public void shouldScoreDoubleWordCorrectly() {
+        Scrabble scrabble = new Scrabble("{aa}a");
+        Assertions.assertEquals(5, scrabble.score());
+    }
+
+    @Test
+    public void shouldScoreTripleWordCorrectly() {
+        Scrabble scrabble = new Scrabble("[aa]a");
+        Assertions.assertEquals(7, scrabble.score());
+    }
 }
