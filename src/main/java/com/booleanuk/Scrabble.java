@@ -17,7 +17,8 @@ public class Scrabble {
     }
 
     public int score() {
-        if (!areBracketsBalanced() || containsNumbers() || containsInvalidCharacters()) {
+
+        if (!areBracketsBalanced() || containsValidCharacters()) {
             return 0;
         }
 
@@ -39,20 +40,11 @@ public class Scrabble {
         return score;
     }
 
-    private boolean containsNumbers() {
-        for (int i = 0; i < word.length(); i++) {
-            if (Character.isDigit(word.charAt(i))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean containsInvalidCharacters() {
+    private boolean containsValidCharacters() {
         for (int i = 0; i < word.length(); i++) {
             char character = word.charAt(i);
-            if (!Character.isLetter(character) && character != '{' && character != '}' && character != '['
-                    && character != ']') {
+            if (!Character.isLetter(character) && character != '{' &&
+                    character != '}' && character != '[' && character != ']' && Character.isDigit(character)) {
                 return true;
             }
         }
