@@ -77,7 +77,7 @@ public class Scrabble {
             var multiplier = e.getKey();
             var letters = e.getValue();
             for (var l : letters) {
-                score += multiplier.getValue() * SCORE_TABLE.get(l);
+                score += multiplier.getValue() * SCORE_TABLE.getOrDefault(l, 0);
             }
         }
 
