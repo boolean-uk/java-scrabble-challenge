@@ -5,35 +5,35 @@ import java.util.Map;
 
 public class Scrabble {
     private final String word;
-    private static final Map<Character, Integer> LETTER_SCORES = new HashMap<>();
+    private static final Map<Character, Integer> letterScores = new HashMap<>();
 
     static {
-        LETTER_SCORES.put('A', 1);
-        LETTER_SCORES.put('E', 1);
-        LETTER_SCORES.put('I', 1);
-        LETTER_SCORES.put('O', 1);
-        LETTER_SCORES.put('U', 1);
-        LETTER_SCORES.put('L', 1);
-        LETTER_SCORES.put('N', 1);
-        LETTER_SCORES.put('R', 1);
-        LETTER_SCORES.put('S', 1);
-        LETTER_SCORES.put('T', 1);
-        LETTER_SCORES.put('D', 2);
-        LETTER_SCORES.put('G', 2);
-        LETTER_SCORES.put('B', 3);
-        LETTER_SCORES.put('C', 3);
-        LETTER_SCORES.put('M', 3);
-        LETTER_SCORES.put('P', 3);
-        LETTER_SCORES.put('F', 4);
-        LETTER_SCORES.put('H', 4);
-        LETTER_SCORES.put('V', 4);
-        LETTER_SCORES.put('W', 4);
-        LETTER_SCORES.put('Y', 4);
-        LETTER_SCORES.put('K', 5);
-        LETTER_SCORES.put('J', 8);
-        LETTER_SCORES.put('X', 8);
-        LETTER_SCORES.put('Q', 10);
-        LETTER_SCORES.put('Z', 10);
+        letterScores.put('A', 1);
+        letterScores.put('E', 1);
+        letterScores.put('I', 1);
+        letterScores.put('O', 1);
+        letterScores.put('U', 1);
+        letterScores.put('L', 1);
+        letterScores.put('N', 1);
+        letterScores.put('R', 1);
+        letterScores.put('S', 1);
+        letterScores.put('T', 1);
+        letterScores.put('D', 2);
+        letterScores.put('G', 2);
+        letterScores.put('B', 3);
+        letterScores.put('C', 3);
+        letterScores.put('M', 3);
+        letterScores.put('P', 3);
+        letterScores.put('F', 4);
+        letterScores.put('H', 4);
+        letterScores.put('V', 4);
+        letterScores.put('W', 4);
+        letterScores.put('Y', 4);
+        letterScores.put('K', 5);
+        letterScores.put('J', 8);
+        letterScores.put('X', 8);
+        letterScores.put('Q', 10);
+        letterScores.put('Z', 10);
     }
 
     public Scrabble(String word) {
@@ -42,10 +42,27 @@ public class Scrabble {
 
     public int score() {
         int score = 0;
+        int multiplier = 1;
         for (int i = 0; i < word.length(); i++) {
             char c = word.charAt(i);
-            if (LETTER_SCORES.containsKey(c)) {
-                score += LETTER_SCORES.get(c);
+            switch (c){
+                case '{':
+                    multiplier *= 2;
+                    break;
+                case '}':
+                    multiplier /= 2;
+                    break;
+                case '[':
+                    multiplier *= 3;
+                    break;
+                case ']':
+                    multiplier /= 3;
+                    break;
+                default:
+                    if (letterScores.containsKey(c)) {
+                        score += letterScores.get(c)*multiplier;
+                    }
+                    break;
             }
         }
         return score;
