@@ -45,4 +45,29 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void shouldScore41ForCaseInsensitiveWord2() {
+        Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
+        Assertions.assertEquals(41, scrabble.score("OXyPHEnBUTaZoNE"));
+    }
+
+    @Test
+    public void curlyBrackets(){
+        Scrabble scrabble = new Scrabble("ad{af}Qx");
+        Assertions.assertEquals(31, scrabble.extendedScore());
+    }
+
+    @Test
+    public void squareBrackets(){
+        Scrabble scrabble = new Scrabble("ad[af]Qx");
+        Assertions.assertEquals(36, scrabble.extendedScore());
+    }
+
+    @Test
+    public void bothBrackets(){
+        Scrabble scrabble = new Scrabble("{ad}[af]Qx");
+        Assertions.assertEquals(39, scrabble.extendedScore());
+    }
+
 }
