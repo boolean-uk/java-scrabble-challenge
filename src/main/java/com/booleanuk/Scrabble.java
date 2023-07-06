@@ -1,5 +1,8 @@
 package com.booleanuk;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Scrabble {
     private String word;
 
@@ -33,4 +36,35 @@ public class Scrabble {
     public int score() {
         return this.word.chars().map(v -> value((char) v)).sum();
     }
+
+    public int score(String w) {
+        return w.chars().map(v -> value((char) v)).sum();
+    }
+
+    public int extendedScore(){
+        int totalScore = 0;
+        Pattern curlyPattern = Pattern.compile("\\{([a-zA-Z]+)\\}");
+        Matcher curlyMatcher = curlyPattern.matcher(this.word);
+
+        Pattern squarePattern = Pattern.compile("\\[([a-zA-Z]+)\\]");
+        Matcher squareMatcher = squarePattern.matcher(this.word);
+
+        while (curlyMatcher.find()) {
+            String letters = curlyMatcher.group(1);
+            int score = this.score(letters) * 2;
+            totalScore += score;
+        }
+
+        while (squareMatcher.find()) {
+            String letters = squareMatcher.group(1);
+            int score = this.score(letters) * 3;
+            totalScore += score;
+        }
+
+        String remainingLetters = word.replaceAll("\\{[a-zA-Z]+\\}|\\[[a-zA-Z]+\\]", "");
+        totalScore += this.score(remainingLetters) ;
+
+        return totalScore;
+    }
+
 }
