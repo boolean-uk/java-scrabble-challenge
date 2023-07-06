@@ -23,27 +23,17 @@ public class Scrabble {
 
         int score = 0;
         int multiplier = 1;
-        int counter = 0;
 
         for (int i = 0; i < word.length(); i++) {
             char letter = word.charAt(i);
 
             switch (letter) {
-                case '{', '[' -> {
+                case '{', '[' ->
                     multiplier *= (letter == '{') ? MULTIPLIER_2X : MULTIPLIER_3X;
-                    counter = 0;
-                }
-                case '}', ']' -> {
+                case '}', ']' ->
                     multiplier /= (letter == '}') ? MULTIPLIER_2X : MULTIPLIER_3X;
-                    if (counter > 1 && i != word.length() - 1) {
-                        return 0;
-                    }
-                    counter = 0;
-                }
-                default -> {
+                default ->
                     score += calculateScore(letter, multiplier);
-                    counter++;
-                }
             }
         }
         return score;

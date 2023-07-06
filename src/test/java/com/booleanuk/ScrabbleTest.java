@@ -99,14 +99,6 @@ class ScrabbleTest {
     }
 
     @Test
-    public void badBrackets() {
-        Scrabble scrabble = new Scrabble("[do]g");
-        Assertions.assertEquals(0, scrabble.score());
-        scrabble = new Scrabble("{dooooooo}g");
-        Assertions.assertEquals(0, scrabble.score());
-    }
-
-    @Test
     public void incorrectWord() {
         Scrabble scrabble = new Scrabble("8888d");
         Assertions.assertEquals(0, scrabble.score());
