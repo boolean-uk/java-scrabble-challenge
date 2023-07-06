@@ -1,43 +1,49 @@
 package com.booleanuk;
 
 public class Scrabble {
-
+    private static final int BASE_MULTIPLIER = 1;
+    private static final int DOUBLE_MULTIPLIER = 2;
+    private static final int TRIPLE_MULTIPLIER = 3;
     private final String word;
+    private int score = 0;
+    private int multiplier = 1;
 
     Scrabble(String word) {
         this.word = word.trim().toUpperCase();
     }
 
-
     public int score() {
-        int score = 0;
         char[] characters = this.word.toCharArray();
 
-        if (characters.length == 0) {
+        if (word.isBlank()) {
             return 0;
         }
 
-
         for (char character : characters) {
 
-
-            score += getCharacterPoints(character);
+            switch (character) {
+                case '{' -> {
+                    if (!isWordDoubled() & this.word.contains("}")) this.multiplier = DOUBLE_MULTIPLIER;
+                }
+                case '[' -> {
+                    if (!isWordTripled() & this.word.contains("]")) this.multiplier = TRIPLE_MULTIPLIER;
+                }
+                case '}', ']' -> this.multiplier = BASE_MULTIPLIER;
+                default -> this.score += getCharacterPoints(character) * this.multiplier;
+            }
         }
 
-
-
-
-
-        if (word.startsWith("{") && word.endsWith("}")) {
-            return score * 2;
+        if (isWordDoubled()) {
+            return this.score * DOUBLE_MULTIPLIER;
         }
 
-        if (word.startsWith("[") && word.endsWith("]")) {
-            return score * 3;
+        if (isWordTripled()) {
+            return this.score * TRIPLE_MULTIPLIER;
         }
 
-        return score;
+        return this.score;
     }
+
 
     int getCharacterPoints(char character) {
         return switch (character) {
@@ -50,5 +56,13 @@ public class Scrabble {
             case 'Q', 'Z' -> 10;
             default -> 0;
         };
+    }
+
+    private boolean isWordTripled() {
+        return this.word.startsWith("[") && this.word.endsWith("]");
+    }
+
+    private boolean isWordDoubled() {
+        return this.word.startsWith("{") && this.word.endsWith("}");
     }
 }

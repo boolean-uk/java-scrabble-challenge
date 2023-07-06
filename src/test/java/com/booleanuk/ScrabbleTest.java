@@ -70,5 +70,35 @@ class ScrabbleTest {
         Assertions.assertEquals(6, scrabble.score());
     }
 
+    @Test
+    public void shouldPointCharacterAsDouble() {
+        Scrabble scrabble = new Scrabble("{s}treet");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+
+    @Test
+    public void shouldPointCharacterAsTriple() {
+        Scrabble scrabble = new Scrabble("[s]treet");
+        Assertions.assertEquals(8, scrabble.score());
+    }
+
+    @Test
+    public void shouldPointCharacterAsTripleAndDoubleInOneWord() {
+        Scrabble scrabble = new Scrabble("[s]t{r}eet");
+        Assertions.assertEquals(9, scrabble.score());
+    }
+
+    @Test
+    public void shouldSkipDoublingCharacterWhenThereIsNoClosingBrace() {
+        Scrabble scrabble = new Scrabble("{street");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+
+    @Test
+    public void shouldDoubleTwoCharactersNextToEachOtherWhenBothBraced() {
+        Scrabble scrabble = new Scrabble("{st}reet");
+        Assertions.assertEquals(8, scrabble.score());
+    }
+
 
 }
