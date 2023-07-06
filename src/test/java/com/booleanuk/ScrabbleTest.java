@@ -45,4 +45,34 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+// extended criteria
+    @Test
+    public void testOne() {
+        Scrabble scrabble = new Scrabble("d{o}g");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+
+    @Test
+    public void testTwo() {
+        Scrabble scrabble = new Scrabble("d[o]g");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+
+    @Test
+    public void testThree() {
+        Scrabble scrabble = new Scrabble("" + "{dog}");
+        Assertions.assertEquals(10, scrabble.score());
+    }
+
+    @Test
+    public void testFour() { //dog = 2+1+2=5 5*3=15
+        Scrabble scrabble = new Scrabble("" + "[dog]");
+        Assertions.assertEquals(15, scrabble.score());
+    }
+
+    @Test
+    public void testFive() { //6*3=18
+        Scrabble scrabble = new Scrabble("[street]");
+        Assertions.assertEquals(18, scrabble.score());
+    }
 }
