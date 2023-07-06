@@ -3,6 +3,7 @@ package com.booleanuk;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+
 class ScrabbleTest {
     @Test
     public void shouldGive0ForEmptyWords() {
@@ -44,5 +45,40 @@ class ScrabbleTest {
     public void shouldScore41ForCaseInsensitiveWord() {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
+    }
+
+    @Test
+    void shouldScore0EmptyCurlyBrackets() {
+        var scrabble = new Scrabble("{}");
+        Assertions.assertEquals(scrabble.score(), 0);
+    }
+
+    @Test
+    void shouldScore0ForEmptySquareBrackets() {
+        var scrabble = new Scrabble("[]");
+        Assertions.assertEquals(scrabble.score(), 0);
+
+    }
+
+
+    @Test
+    void shouldScore6ForDoubleOInDog() {
+        var scrabble = new Scrabble("d{o}g");
+        Assertions.assertEquals(scrabble.score(), 6);
+
+    }
+
+    @Test
+    void shouldScore7ForTripleOInDog() {
+        var scrabble = new Scrabble("d[o]g");
+        Assertions.assertEquals(scrabble.score(), 7);
+
+    }
+
+    @Test
+    void shouldScore9ForDoubledDAndTripledOInDog() {
+        var scrabble = new Scrabble("{d}[o]g");
+        Assertions.assertEquals(scrabble.score(), 9);
+
     }
 }
