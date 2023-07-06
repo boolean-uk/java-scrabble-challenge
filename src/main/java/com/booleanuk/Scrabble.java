@@ -46,11 +46,10 @@ public class Scrabble {
             char c = word.charAt(i);
             if(c == '{') multiplier *= 2;
             else if(c == '}') multiplier /= 2;
-            else if(c == '(') multiplier *= 3;
-            else if(c == ')') multiplier /= 3;
+            else if(c == '[') multiplier *= 3;
+            else if(c == ']') multiplier /= 3;
             else if(pointsMap.containsKey(Character.toUpperCase(c)))
-               points += pointsMap.get(Character.toUpperCase(c))
-                       * multiplier;
+               points += pointsMap.get(Character.toUpperCase(c)) * multiplier;
         }
         return points;
     }
