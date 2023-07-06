@@ -45,4 +45,30 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void shouldTripleScoreIfStartAndFinishWithSquareBrace() {
+        Scrabble scrabble = new Scrabble("[street]");
+        Assertions.assertEquals(18, scrabble.score());
+    }
+
+    @Test
+    public void shouldSkipSquareBracesIfTheyDontMatchToPair() {
+        Scrabble scrabble = new Scrabble("]street[");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+
+    @Test
+    public void shouldDoubleScoreIfStartAndFinishWithSquareBrace() {
+        Scrabble scrabble = new Scrabble("{street}");
+        Assertions.assertEquals(12, scrabble.score());
+    }
+
+    @Test
+    public void shouldSkipCurlyBracesIfTheyDontMatchToPair() {
+        Scrabble scrabble = new Scrabble("}street{");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+
+
 }
