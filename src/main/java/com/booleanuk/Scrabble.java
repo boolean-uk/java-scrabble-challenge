@@ -1,10 +1,17 @@
 package com.booleanuk;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Scrabble {
     public String wordToCalculate;
     public int score;
+    static final String REGEX_CURLY_BRACKETS = ("\\{([^}]+)\\}");
+    static final String REGEX_SQUARE_BRACKETS  = ("\\[(\\w+)\\]");
+
+    static final int CURLY_BRACKET_BONUS = 2;
+    static final int SQUARE_BRACKET_BONUS = 3;
     public static final Map<Character, Integer> pointsForLetters = Map.ofEntries(
             Map.entry('A', 1),
             Map.entry('E', 1),
@@ -39,27 +46,34 @@ public class Scrabble {
     }
 
     public int score(){
-        int multipleScoreBy = 1;
-        char[] arrayOfChars = this.wordToCalculate.toCharArray();
+        int curlyBracketsPoints = getExtraBracketPoints(REGEX_CURLY_BRACKETS) * CURLY_BRACKET_BONUS;
+        int squareBracketsPoints = getExtraBracketPoints(REGEX_SQUARE_BRACKETS ) * SQUARE_BRACKET_BONUS;
+        int points = countPoints(wordToCalculate);
+        score += curlyBracketsPoints + squareBracketsPoints + points;
+        return score;
+    }
 
+    public int getExtraBracketPoints(String regex) {
+        int actualScore = 0;
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(wordToCalculate);
+
+        while (matcher.find()) {
+            String wordInDoubleBracket = matcher.group(1);
+            actualScore += countPoints(wordInDoubleBracket);
+            wordToCalculate = wordToCalculate.replaceFirst(regex, "");
+        }
+        return actualScore;
+    }
+
+    public int countPoints(String word){
+        int actualScore = 0;
+        char[] arrayOfChars = word.toCharArray();
         for (char c: arrayOfChars){
-            if (c == '{'){
-                multipleScoreBy = 2;
-                continue;
-            }
-            else if (c == '[') {
-                multipleScoreBy = 3;
-                continue;
-            }
-            else if (c == '}' || c == ']') {
-                multipleScoreBy = 1;
-                continue;
-            }
-
             if (pointsForLetters.containsKey(c)){
-                score += multipleScoreBy * pointsForLetters.get(c);
+                actualScore += pointsForLetters.get(c);
             }
         }
-        return score;
+        return actualScore;
     }
 }
