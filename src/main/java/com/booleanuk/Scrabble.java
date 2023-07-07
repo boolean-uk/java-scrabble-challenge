@@ -4,9 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Scrabble {
-    private static final Map<Character, Integer> LETTER_VALUES = populateLetterValues();
+    private static final Map<Character, Integer> LETTER_VALUES = new HashMap<>();
     private static final String DOUBLE_MULTIPLIER = "^\\{.+}$";
     private static final String TRIPLE_MULTIPLIER = "^\\[.+]$";
+
+    static {
+        populateLetterValues();
+    }
 
     private final String word;
 
@@ -27,16 +31,18 @@ public class Scrabble {
         return points * multiplier(word);
     }
 
-    private static Map<Character, Integer> populateLetterValues() {
-        Map<Character, Integer> letterValues = new HashMap<>();
-        "AEIOULNRST".chars().forEach(c -> letterValues.put((char) c, 1));
-        "DG".chars().forEach(c -> letterValues.put((char) c, 2));
-        "BCMP".chars().forEach(c -> letterValues.put((char) c, 3));
-        "FHVWY".chars().forEach(c -> letterValues.put((char) c, 4));
-        "K".chars().forEach(c -> letterValues.put((char) c, 5));
-        "JX".chars().forEach(c -> letterValues.put((char) c, 8));
-        "QZ".chars().forEach(c -> letterValues.put((char) c, 10));
-        return letterValues;
+    private static void populateLetterValues() {
+        addLetterValues("AEIOULNRST", 1);
+        addLetterValues("DG", 2);
+        addLetterValues("BCMP", 3);
+        addLetterValues("FHVWY", 4);
+        addLetterValues("K", 5);
+        addLetterValues("JX", 8);
+        addLetterValues("QZ", 10);
+    }
+
+    private static void addLetterValues(String letters, int value) {
+        letters.chars().forEach(c -> LETTER_VALUES.put((char) c, value));
     }
 
     private int multiplier(String str) {
