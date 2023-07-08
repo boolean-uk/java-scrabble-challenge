@@ -9,7 +9,13 @@ public class Scrabble {
     private static final String TRIPLE_MULTIPLIER = "^\\[.+]$";
 
     static {
-        populateLetterValues();
+        addLetterValues("AEIOULNRST", 1);
+        addLetterValues("DG", 2);
+        addLetterValues("BCMP", 3);
+        addLetterValues("FHVWY", 4);
+        addLetterValues("K", 5);
+        addLetterValues("JX", 8);
+        addLetterValues("QZ", 10);
     }
 
     private final String word;
@@ -23,22 +29,10 @@ public class Scrabble {
         char[] letters = word.toUpperCase().toCharArray();
         for (int i = 0; i < letters.length; i++) {
             if (Character.isLetter(letters[i])) {
-                boolean isMiddleChar = i > 0 && i < word.length() - 1;
-                int multiplier = isMiddleChar ? multiplier(word.substring(i - 1, i + 2)) : 1;
-                points += LETTER_VALUES.get(letters[i]) * multiplier;
+                points += LETTER_VALUES.get(letters[i]) * multiplier(i);
             }
         }
         return points * multiplier(word);
-    }
-
-    private static void populateLetterValues() {
-        addLetterValues("AEIOULNRST", 1);
-        addLetterValues("DG", 2);
-        addLetterValues("BCMP", 3);
-        addLetterValues("FHVWY", 4);
-        addLetterValues("K", 5);
-        addLetterValues("JX", 8);
-        addLetterValues("QZ", 10);
     }
 
     private static void addLetterValues(String letters, int value) {
@@ -50,5 +44,10 @@ public class Scrabble {
     private int multiplier(String str) {
         return  str.matches(TRIPLE_MULTIPLIER) ? 3 :
                 str.matches(DOUBLE_MULTIPLIER) ? 2 : 1;
+    }
+
+    private int multiplier(int i) {
+        boolean isMiddleChar = i > 0 && i < word.length() - 1;
+        return isMiddleChar ? multiplier(word.substring(i - 1, i + 2)) : 1;
     }
 }
