@@ -42,7 +42,9 @@ public class Scrabble {
     }
 
     private static void addLetterValues(String letters, int value) {
-        letters.chars().forEach(c -> LETTER_VALUES.put((char) c, value));
+        for (char c : letters.toCharArray()) {
+            LETTER_VALUES.put(c, value);
+        }
     }
 
     private int multiplier(String str) {
