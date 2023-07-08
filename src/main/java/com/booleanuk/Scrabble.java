@@ -32,17 +32,19 @@ public class Scrabble {
     }
 
     private static void populateLetterValues() {
-        addLetterValues("AEIOULNRST", 1);
-        addLetterValues("DG", 2);
-        addLetterValues("BCMP", 3);
-        addLetterValues("FHVWY", 4);
-        addLetterValues("K", 5);
-        addLetterValues("JX", 8);
-        addLetterValues("QZ", 10);
+        addValues("AEIOULNRST", 1);
+        addValues("DG", 2);
+        addValues("BCMP", 3);
+        addValues("FHVWY", 4);
+        addValues("K", 5);
+        addValues("JX", 8);
+        addValues("QZ", 10);
     }
 
-    private static void addLetterValues(String letters, int value) {
-        letters.chars().forEach(c -> LETTER_VALUES.put((char) c, value));
+    private static void addValues(String letters, int value) {
+        for (char c : letters.toCharArray()) {
+            LETTER_VALUES.put(c, value);
+        }
     }
 
     private int multiplier(String str) {
