@@ -45,4 +45,31 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void testForSingleLetterInWorldWithCurlyBrackets() {
+        Scrabble scrabble = new Scrabble("d{o}g");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+    @Test
+    public void testForSingleLetterInWorldWithSquareBrackets() {
+        Scrabble scrabble = new Scrabble("d[o]g");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+    @Test
+    public void testForWholeWordWithCurlyBrackets() {
+        Scrabble scrabble = new Scrabble("{street}");
+        Assertions.assertEquals(12, scrabble.score());
+    }
+    @Test
+    public void testForWholeWordWithSquareBrackets() {
+        Scrabble scrabble = new Scrabble("[street]");
+        Assertions.assertEquals(18, scrabble.score());
+    }
+    @Test
+    public void testWithBothCurlyAndSquareBrackets() {
+        Scrabble scrabble = new Scrabble("[d]o{g}");
+        Assertions.assertEquals(11, scrabble.score());
+    }
+
 }
