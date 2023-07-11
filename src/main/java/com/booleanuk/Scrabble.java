@@ -53,8 +53,17 @@ public class Scrabble {
             }
         }
 
+        //checking the brackets [dog]
+        if(word.length() > 0){
+            if(word.charAt(0) == '{' || word.charAt(word.length() - 1) == '}')
+                result = result * 2;
+            else if (word.charAt(0) == '[' || word.charAt(word.length() - 1) == ']')
+                result = result * 3;
+        }
+
         return result;
     }
+
 
 
 }
