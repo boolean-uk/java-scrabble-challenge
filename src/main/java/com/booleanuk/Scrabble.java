@@ -44,26 +44,55 @@ public class Scrabble {
 
     public int score() {
         int result = 0;
+        boolean isDouble = false;
+        boolean isTriple = false;
+        boolean doubleWord = false;
+        boolean tripleWord = false;
+
+        //checking the brackets [dog]
+        if(word.length() > 1){
+            if(word.charAt(0) == '{' && word.charAt(word.length() - 1) == '}'){
+                doubleWord = true;
+                word = word.substring(1, word.length()-1);
+            }
+            else if (word.charAt(0) == '[' && word.charAt(word.length() - 1) == ']'){
+                tripleWord = true;
+                word = word.substring(1, word.length()-1);
+            }
+            System.out.println(word);
+        }
+
         char[] letters = word.toCharArray();
 
         for (char c : letters){
             c = Character.toUpperCase(c);
+
+            if(c == '{' && word.charAt(0) != '{' && word.charAt(word.length() - 1) != '}')
+                isDouble = true;
+
+            if (c == '[' && word.charAt(0) != '[' && word.charAt(word.length() - 1) != ']')
+                isTriple = true;
+
             if(letterScores.containsKey(c)){
-                result += letterScores.get(c);
+                int score = letterScores.get(c);
+
+                if(isDouble)
+                    score *= 2;
+
+                if (isTriple)
+                    score *= 3;
+
+                isDouble = false;
+                isTriple = false;
+                result += score;
             }
         }
 
-        //checking the brackets [dog]
-        if(word.length() > 0){
-            if(word.charAt(0) == '{' || word.charAt(word.length() - 1) == '}')
-                result = result * 2;
-            else if (word.charAt(0) == '[' || word.charAt(word.length() - 1) == ']')
-                result = result * 3;
-        }
+
+        if(doubleWord) { result *= 2; }
+        if(tripleWord) { result *= 3; }
 
         return result;
     }
-
-
 
 }

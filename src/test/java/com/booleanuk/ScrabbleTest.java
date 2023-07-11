@@ -57,4 +57,28 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("{street}");
         Assertions.assertEquals(12, scrabble.score());
     }
+
+    @Test
+    public void shouldScore7() {
+        Scrabble scrabble = new Scrabble("str{e}et");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore8() {
+        Scrabble scrabble = new Scrabble("str[e]et");
+        Assertions.assertEquals(8, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore9() {
+        Scrabble scrabble = new Scrabble("str[e]{e}t");
+        Assertions.assertEquals(9, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore27() {
+        Scrabble scrabble = new Scrabble("[str[e]{e}t]");
+        Assertions.assertEquals(27, scrabble.score());
+    }
 }
