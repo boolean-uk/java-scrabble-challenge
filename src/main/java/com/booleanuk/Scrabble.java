@@ -6,6 +6,7 @@ public class Scrabble {
     String word;
     HashMap<Character, Integer> points = new HashMap<>();
     public Scrabble(String word) {
+        this.word = word;
         points.put('A',1);
         points.put('E',1);
         points.put('I',1);
