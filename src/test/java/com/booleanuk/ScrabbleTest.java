@@ -45,4 +45,16 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void shouldScore6ForDWithDoubleOAndG() {
+        Scrabble scrabble = new Scrabble("d{o}g");
+        Assertions.assertEquals(6,scrabble.score());
+    }
+
+    @Test
+    public void shouldScore7ForDWithTripleOAndG() {
+        Scrabble scrabble = new Scrabble("d[o]g");
+        Assertions.assertEquals(7,scrabble.score());
+    }
 }

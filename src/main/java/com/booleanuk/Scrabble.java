@@ -15,11 +15,30 @@ public class Scrabble {
     }
 
     public int score() {
+        boolean doubleScore = false;
+        boolean tripleScore = false;
 
         for (char character : userInput.toCharArray()) {
-            for (String key : letters.keySet()) {
-                if (String.valueOf(character).toUpperCase().equals(key)) {
-                    score += letters.get(key);
+            String ch = String.valueOf(character).toUpperCase();
+
+            if (Character.isLetter(character)) {
+                int letterScore = letters.get(ch);
+                if (doubleScore) {
+                    letterScore *= 2;
+                    doubleScore = false;
+                } else if (tripleScore) {
+                    letterScore *= 3;
+                    tripleScore = false;
+                }
+                score += letterScore;
+            } else {
+                if (character == '{') {
+                    doubleScore = true;
+                } else if (character == '[') {
+                    tripleScore = true;
+                } else if (character == '}' || character == ']') {
+                    doubleScore = false;
+                    tripleScore = false;
                 }
             }
         }
@@ -30,20 +49,21 @@ public class Scrabble {
     public void fillLetters() {
 
         for (char letter = 'A'; letter <= 'Z'; letter++) {
+            String let = String.valueOf(letter);
             if (letter == 'D' || letter == 'G') {
-                letters.put(String.valueOf(letter), 2);
+                letters.put(let, 2);
             } else if (letter == 'B' || letter == 'C' || letter == 'M' || letter == 'P') {
-                letters.put(String.valueOf(letter), 3);
+                letters.put(let, 3);
             } else if (letter == 'F' || letter == 'H' || letter == 'V' || letter == 'W' || letter == 'Y') {
-                letters.put(String.valueOf(letter), 4);
+                letters.put(let, 4);
             } else if (letter == 'K') {
-                letters.put(String.valueOf(letter), 5);
+                letters.put(let, 5);
             } else if (letter == 'J' || letter == 'X') {
-                letters.put(String.valueOf(letter), 8);
+                letters.put(let, 8);
             } else if (letter == 'Q' || letter == 'Z') {
-                letters.put(String.valueOf(letter), 10);
+                letters.put(let, 10);
             } else {
-                letters.put(String.valueOf(letter), 1);
+                letters.put(let, 1);
             }
         }
         letters.put(String.valueOf('\n'), 0);
