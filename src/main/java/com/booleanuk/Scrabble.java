@@ -1,88 +1,94 @@
 package com.booleanuk;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
 
 public class Scrabble {
-
-    private static final Map<Character, Integer> letterValues = new HashMap<>();
-    public String word;
-
-    public Scrabble(String word) {
-        this.word = word;
-    }
+    private static final Set<String> dictionary = new HashSet<>();
+    private static final Scanner scanner = new Scanner(System.in);
 
     static {
-        letterValues.put('A', 1);
-        letterValues.put('E', 1);
-        letterValues.put('I', 1);
-        letterValues.put('O', 1);
-        letterValues.put('U', 1);
-        letterValues.put('L', 1);
-        letterValues.put('N', 1);
-        letterValues.put('R', 1);
-        letterValues.put('S', 1);
-        letterValues.put('T', 1);
-        letterValues.put('D', 2);
-        letterValues.put('G', 2);
-        letterValues.put('B', 3);
-        letterValues.put('C', 3);
-        letterValues.put('M', 3);
-        letterValues.put('P', 3);
-        letterValues.put('F', 4);
-        letterValues.put('H', 4);
-        letterValues.put('V', 4);
-        letterValues.put('W', 4);
-        letterValues.put('Y', 4);
-        letterValues.put('K', 5);
-        letterValues.put('J', 8);
-        letterValues.put('X', 8);
-        letterValues.put('Q', 10);
-        letterValues.put('Z', 10);
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:/Users/Veronique/IdeaProjects/BooleanUK/java-scrabble-challenge/src/main/java/com/booleanuk/resources/dictionary.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                dictionary.add(line.trim().toUpperCase());
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading the dictionary file.");
+            e.printStackTrace();
+        }
     }
 
-
-    public int score() {
+    public static int score(String word, List<Tile> playerTiles) {
         int score = 0;
         int letterMultiplier = 1;
         int wordMultiplier = 1;
-        if (this.word != null) {
-            this.word = this.word.trim().toUpperCase();
-            if (hasInvalidCharacters(this.word)) {
+        boolean hasInvalidLetter = false;
+
+        if (word != null) {
+            word = word.trim().toUpperCase();
+
+            if (hasInvalidCharacters(word)) {
+                System.out.println("Your word includes invalid characters. Only letters and multiplier brackets allowed.");
                 return 0;
             }
 
-            wordMultiplier = calculateWordMultiplier(this.word);
+            wordMultiplier = calculateWordMultiplier(word);
+
             if (wordMultiplier > 1) {
-                this.word = wordWithoutWordMultipliers(this.word);
+                word = wordWithoutWordMultipliers(word);
             }
-            for (int index = 0; index < this.word.length(); index++) {
-                char letter = this.word.charAt(index);
+
+            for (int index = 0; index < word.length(); index++) {
+                char letter = word.charAt(index);
                 if (letter == '{') {
-                    if (this.word.charAt(index + 2) != '}') {
+                    if ((index + 2) >= word.length() || word.charAt(index + 2) != '}') {
                         return 0;
                     }
                     letterMultiplier = 2;
                 } else if (letter == '}') {
-                    if (this.word.charAt(index - 2) != '{') {
+                    if ((index - 2) < 0 || word.charAt(index - 2) != '{') {
                         return 0;
                     }
                     letterMultiplier = 1;
                 } else if (letter == '[') {
-                    if (this.word.charAt(index + 2) != ']') {
+                    if ((index + 2) >= word.length() || word.charAt(index + 2) != ']') {
                         return 0;
                     }
                     letterMultiplier = 3;
                 } else if (letter == ']') {
-                    if (this.word.charAt(index - 2) != '[') {
+                    if ((index - 2) < 0 || word.charAt(index - 2) != '[') {
                         return 0;
                     }
                     letterMultiplier = 1;
                 } else if (isAlphabetic(letter)) {
-                    score += letterValues.get(letter) * letterMultiplier;
+                    boolean letterFound = false;
+                    for (Tile tile : playerTiles) {
+                        if (tile.getLetter() == letter) {
+                            score += tile.getValue() * letterMultiplier;
+                            letterFound = true;
+                            break;
+                        }
+                    }
+                    if (!letterFound) {
+                        hasInvalidLetter = true;
+                        break;
+                    }
                 } else {
+                    System.out.println("Invalid multiplier syntax.");
                     return 0;
                 }
+            }
+            String candidateWord = word.replaceAll("[^a-zA-Z]", "").toUpperCase();
+            if (!dictionary.contains(candidateWord)) {
+                System.out.println("Word '" + candidateWord + "' is not in the dictionary.");
+                return 0;
+            }
+            if (hasInvalidLetter) {
+                System.out.println("No cheating! You tried using a letter that was not in your hand!");
+                return 0;
             }
             score *= wordMultiplier;
         }
@@ -136,23 +142,16 @@ public class Scrabble {
         }
         return wordMultiplier;
     }
-//    public static int calculateCharacterScore(char character) {
-//        if (isMultiplier(character)) {
-//            return 0; // Return the appropriate score based on multipliers
-//        }
-//        if (isAlphabetic(character)) {
-//            return letterValues.get(character);
-//        }
-//        return 0;
-//    }
 
     public static boolean isAlphabetic(char character) {
         int code = character;
         return (code >= 65 && code <= 90) || (code >= 97 && code <= 122);
     }
+
     public static boolean isMultiplier(char character) {
         return character == '[' || character == ']' || character == '{' || character == '}';
     }
+
     public static boolean hasInvalidCharacters(String word) {
         for (char character : word.toCharArray()) {
             if (!isAlphabetic(character) && !isMultiplier(character)) {
@@ -162,6 +161,83 @@ public class Scrabble {
         return false;
     }
 
+    public  void playGame() {
+        LetterBag letterBag = new LetterBag();
+        Player player1 = new Player(getPlayerName(1), 0);
+        Player player2 = new Player(getPlayerName(2), 0);
+        player1.initializeTiles(letterBag, 7);
+        player2.initializeTiles(letterBag, 7);
+        Player winner = null;
 
+        boolean isPlayer1Turn = true;
 
+        while (true) {
+            Player currentPlayer;
+            Player otherPlayer;
+            if (isPlayer1Turn) {
+                currentPlayer = player1;
+                otherPlayer = player2;
+            } else {
+                currentPlayer = player2;
+                otherPlayer = player1;
+            }
+            System.out.println(currentPlayer.getName() + ", it's your turn.");
+            System.out.print("Your current letters: ");
+            for (Tile tile : currentPlayer.getHand()) {
+                System.out.print(tile.getLetter() + " ");
+            }
+            System.out.println();
+            String currentPlayerWord = getPlayerWord(currentPlayer.getName());
+
+            if ("endGame".equalsIgnoreCase(currentPlayerWord)) {
+                System.out.println(currentPlayer.getName() + " ended the game.");
+                printWinner(player1, player2);
+                break;
+            }
+            int wordScore = Scrabble.score(currentPlayerWord, currentPlayer.getHand());
+
+            if (wordScore > 0) {
+                currentPlayer.addScore(wordScore);
+                System.out.println(currentPlayer.getName() + "'s score: " + wordScore);
+                System.out.println(currentPlayer.getName() + "'s total score: " + currentPlayer.getScore());
+                currentPlayer.removeFromHandAndDraw(letterBag, currentPlayerWord.toUpperCase());
+            } else {
+                System.out.println("Invalid word. " + currentPlayer.getName() + " loses this turn.");
+            }
+            if (letterBag.getTiles().isEmpty()) {
+                printWinner(player1, player2);
+                break;
+            }
+            isPlayer1Turn = !isPlayer1Turn;
+        }
+    }
+
+    private void printWinner(Player player1, Player player2) {
+        Player winner;
+        winner = calculateWinner(player1, player2);
+        if (winner==null) {
+            System.out.println("It's a draw!");
+        } else {
+            System.out.println(winner.getName() + " wins!");
+        }
+    }
+
+    public static String getPlayerName(int playerNumber) {
+        System.out.print("Enter Player " + playerNumber + " name: ");
+        return scanner.nextLine();
+    }
+
+    public static String getPlayerWord(String playerName) {
+        System.out.print(playerName + ", enter your word: ");
+        return scanner.nextLine();
+    }
+    private Player calculateWinner(Player player1, Player player2) {
+        if (player1.getScore() > player2.getScore()) {
+            return player1;
+        } else if (player2.getScore() > player1.getScore()) {
+            return player2;
+        } else {
+            return null;
+        }
+    }
 }
