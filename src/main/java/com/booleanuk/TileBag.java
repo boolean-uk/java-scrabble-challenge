@@ -51,5 +51,6 @@ public class TileBag {
 
     public void setSeed(long seed) {
         this.seed = seed;
+        randomizer.setSeed(this.seed);
     }
 }

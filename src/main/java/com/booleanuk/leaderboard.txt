@@ -1,0 +1,2 @@
+       ### Scrabble Single Player Leaderboard ###
+<!>These are the scores of previous players of the game<!>
