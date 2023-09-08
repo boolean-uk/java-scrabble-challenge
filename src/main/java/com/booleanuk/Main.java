@@ -1,9 +1,13 @@
 package com.booleanuk;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
+
 public class Main {
     public static void main(String[] args){
-        Scrabble scrabble= new Scrabble("P{anos");
-        scrabble.score();
+        DeScramble deScramble = new DeScramble();
     }
 }
 
