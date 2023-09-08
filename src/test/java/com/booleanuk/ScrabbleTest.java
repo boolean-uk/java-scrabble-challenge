@@ -136,4 +136,10 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("{[dog]}");
         Assertions.assertEquals(30, scrabble.score());
     }
+
+    @Test
+    public void shouldScore0withMoreBrackets(){
+        Scrabble scrabble = new Scrabble("{{p}ea{r}}}");
+        Assertions.assertEquals(0, scrabble.score());
+    }
 }

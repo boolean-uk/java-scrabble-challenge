@@ -61,6 +61,9 @@ public class Scrabble {
                 }
             }
         }
+        if (crlBrackets != 0 || sqrBrackets != 0) {
+            return false;
+        }
         //Set word bonus
         boolean loop = true;
         while (loop){
@@ -100,5 +103,9 @@ public class Scrabble {
         }
         this.word = this.word.substring(1,this.word.length()-1);
         return true;
+    }
+
+    public String get() {
+        return this.word;
     }
 }

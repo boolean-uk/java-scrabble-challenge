@@ -15,6 +15,8 @@ public class PlayerRack {
         return this.rack.size();
     }
 
+    public int getCapacity() { return this.capacity; }
+
     public boolean addTile(char tile) {
         if (this.getSize() < this.capacity) {
             this.rack.add(tile);
@@ -41,11 +43,11 @@ public class PlayerRack {
         this.rack.clear();
     }
 
-    public void printRack() {
+    public String getRack() {
         StringBuilder letters = new StringBuilder();
         for (char letter: rack){
             letters.append(letter).append(" ");
         }
-        System.out.println(String.valueOf(letters).strip());
+        return String.valueOf(letters).strip();
     }
 }
