@@ -1,8 +1,6 @@
 package com.booleanuk;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 class ScrabbleTest {
     @Test
     public void shouldGive0ForEmptyWords() {
@@ -45,4 +43,35 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void shouldGiveScoreForDoubleLetter() {
+        Scrabble scrabble = new Scrabble("d{o}g");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+    @Test
+    public void shouldGiveScoreForTripleLetter() {
+        Scrabble scrabble = new Scrabble("d[o]g");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore9() {
+        Scrabble scrabble = new Scrabble("{d}o{g}");
+        Assertions.assertEquals(9, scrabble.score());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
