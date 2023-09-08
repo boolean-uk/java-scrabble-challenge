@@ -45,4 +45,65 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void shouldScore6() {
+        Scrabble scrabble = new Scrabble("d{o}g");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore7() {
+        Scrabble scrabble = new Scrabble("d[o]g");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore0forInvalidWord() {
+        Scrabble scrabble = new Scrabble("do}g");
+        Assertions.assertEquals(0, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore10() {
+        Scrabble scrabble = new Scrabble("{dog}");
+        Assertions.assertEquals(10, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore15() {
+        Scrabble scrabble = new Scrabble("[dog]");
+        Assertions.assertEquals(15, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore18() {
+        Scrabble scrabble = new Scrabble("{[d]og}");
+        Assertions.assertEquals(18, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore30() {
+        Scrabble scrabble = new Scrabble("[{dog}]");
+        Assertions.assertEquals(30, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore9() {
+        Scrabble scrabble = new Scrabble("{d}o{g}");
+        Assertions.assertEquals(9, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore0forIncorrectTokens() {
+        Scrabble scrabble = new Scrabble("|dog|");
+        Assertions.assertEquals(0, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore0forInvalidWord2() {
+        Scrabble scrabble = new Scrabble("[dog");
+        Assertions.assertEquals(0, scrabble.score());
+    }
+
 }
