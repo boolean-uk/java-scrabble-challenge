@@ -21,6 +21,7 @@ public class TileBag {
             put('Y',2); put('Z',1);
         }};
         this.randomizer = new Random(this.seed);
+        System.out.println("Shaking Tile Bag...");
     }
 
     public char getTile(){
@@ -51,10 +52,4 @@ public class TileBag {
     public void setSeed(long seed) {
         this.seed = seed;
     }
-
-//    public void printBag() {
-//        for (Map.Entry<Character, Integer> set : this.bag.entrySet()) {
-//            System.out.println(set.getKey() + ": " + set.getValue());
-//        };
-//    }
 }
