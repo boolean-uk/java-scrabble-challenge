@@ -66,7 +66,7 @@ public class MainGame {
             System.out.print("Your letters are: ");
             rack.printRack();
             if (gameMenu(i)) {
-                System.out.println("Go ahead and spell a word.");
+                playRound();
             } else {
                 System.out.println("You discard your current letters and get new ones.");
                 setRack(bag,rack, true);
@@ -97,6 +97,10 @@ public class MainGame {
         for (int i=0; i<7; i++){
             rack.addTile(bag.getTile());
         }
+    }
+
+    public static void playRound(){
+        System.out.println("Go ahead and spell a word.");
     }
 
     public static void leaderboard() {
