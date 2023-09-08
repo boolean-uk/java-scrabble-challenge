@@ -17,7 +17,6 @@ public class Scrabble {
         for (char c : calcVal) {
             String checkerValue = String.valueOf(c).toUpperCase();
             //  System.out.println(checkerValue);
-
             //  checkerValue.equals("A") ||
             //  checkerValue.equals("E") ||
             //  checkerValue.equals("I")
