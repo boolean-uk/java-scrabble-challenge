@@ -21,26 +21,26 @@ public class Scrabble {
         for (char character : userInput.toCharArray()) {
             String ch = String.valueOf(character).toUpperCase();
 
-            if (Character.isLetter(character)) {
-                int letterScore = letters.get(ch);
-                if (doubleScore) {
-                    letterScore *= 2;
-                    doubleScore = false;
-                } else if (tripleScore) {
-                    letterScore *= 3;
-                    tripleScore = false;
-                }
-                score += letterScore;
-            } else {
-                if (character == '{') {
-                    doubleScore = true;
-                } else if (character == '[') {
-                    tripleScore = true;
-                } else if (character == '}' || character == ']') {
-                    doubleScore = false;
-                    tripleScore = false;
-                }
+            if (character == '{') {
+                doubleScore = true;
+                continue;
+            } else if (character == '[') {
+                tripleScore = true;
+                continue;
+            } else if (character == '}' || character == ']') {
+                doubleScore = false;
+                tripleScore = false;
+                continue;
             }
+
+            int letterScore = letters.get(ch);
+
+            if (doubleScore) {
+                letterScore *= 2;
+            } else if (tripleScore) {
+                letterScore *= 3;
+            }
+            score += letterScore;
         }
         return score;
     }

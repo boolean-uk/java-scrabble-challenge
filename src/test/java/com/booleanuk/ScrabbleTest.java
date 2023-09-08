@@ -57,4 +57,22 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("d[o]g");
         Assertions.assertEquals(7,scrabble.score());
     }
+
+    @Test
+    public void shouldScore8ForDoubleDOAndG() {
+        Scrabble scrabble = new Scrabble("{do}g");
+        Assertions.assertEquals(8,scrabble.score());
+    }
+
+    @Test
+    public void shouldScore11ForTripleDOAndG() {
+        Scrabble scrabble = new Scrabble("[do]g");
+        Assertions.assertEquals(11,scrabble.score());
+    }
+
+    @Test
+    public void shouldScore11ForDoubleDAndOAndTripleG() {
+        Scrabble scrabble = new Scrabble("{d}o[g]");
+        Assertions.assertEquals(11,scrabble.score());
+    }
 }
