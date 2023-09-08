@@ -67,6 +67,7 @@ public class MainGame {
             rack.printRack();
             if (gameMenu(i)) {
                 System.out.println("Go ahead and spell a word.");
+                
             } else {
                 System.out.println("You discard your current letters and get new ones.");
                 setRack(bag,rack, true);
