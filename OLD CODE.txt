@@ -1,10 +1,9 @@
 package com.booleanuk;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Scrabble {
-
     private static final Map<Character, Integer> letterValues = new HashMap<>();
     public String word;
 
@@ -40,7 +39,6 @@ public class Scrabble {
         letterValues.put('Q', 10);
         letterValues.put('Z', 10);
     }
-
 
     public int score() {
         int score = 0;
@@ -136,15 +134,16 @@ public class Scrabble {
         }
         return wordMultiplier;
     }
-//    public static int calculateCharacterScore(char character) {
-//        if (isMultiplier(character)) {
-//            return 0; // Return the appropriate score based on multipliers
-//        }
-//        if (isAlphabetic(character)) {
-//            return letterValues.get(character);
-//        }
-//        return 0;
-//    }
+    public static int calculateCharacterScore(char character) {
+        if (isMultiplier(character)) {
+            // Handle multipliers if needed
+            return 0; // Return the appropriate score based on multipliers
+        }
+        if (isAlphabetic(character)) {
+            return letterValues.get(character); // Retrieve the score from your existing map
+        }
+        return 0; // Handle other characters as needed
+    }
 
     public static boolean isAlphabetic(char character) {
         int code = character;
@@ -161,7 +160,10 @@ public class Scrabble {
         }
         return false;
     }
-
-
-
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String word = scanner.nextLine();
+        Scrabble scrabble = new Scrabble(word);
+        System.out.println(scrabble.score());
+    }
 }

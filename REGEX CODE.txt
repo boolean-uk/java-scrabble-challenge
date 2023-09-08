@@ -1,0 +1,174 @@
+package com.booleanuk;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Scrabble {
+    private static final Scanner scanner = new Scanner(System.in);
+
+    private static final Map<Character, Integer> letterValues = new HashMap<>();
+    public String word;
+
+    public Scrabble(String word) {
+        this.word = word;
+    }
+
+    static {
+        letterValues.put('A', 1);
+        letterValues.put('E', 1);
+        letterValues.put('I', 1);
+        letterValues.put('O', 1);
+        letterValues.put('U', 1);
+        letterValues.put('L', 1);
+        letterValues.put('N', 1);
+        letterValues.put('R', 1);
+        letterValues.put('S', 1);
+        letterValues.put('T', 1);
+        letterValues.put('D', 2);
+        letterValues.put('G', 2);
+        letterValues.put('B', 3);
+        letterValues.put('C', 3);
+        letterValues.put('M', 3);
+        letterValues.put('P', 3);
+        letterValues.put('F', 4);
+        letterValues.put('H', 4);
+        letterValues.put('V', 4);
+        letterValues.put('W', 4);
+        letterValues.put('Y', 4);
+        letterValues.put('K', 5);
+        letterValues.put('J', 8);
+        letterValues.put('X', 8);
+        letterValues.put('Q', 10);
+        letterValues.put('Z', 10);
+    }
+
+
+    public int score() {
+        if (this.word == null || this.word.trim().isEmpty()) {
+            return 0;
+        }
+
+        String cleanedWord = this.word.trim().toUpperCase();
+
+        // Define patterns for letter and word multipliers
+        String letterMultiplierPattern = "([A-Z])\\{(\\w+)\\}";
+        String wordMultiplierPattern = "\\{([^{}]+)\\}";
+
+        // Apply letter multipliers
+        cleanedWord = applyLetterMultipliers(cleanedWord, letterMultiplierPattern);
+
+        // Apply word multipliers
+        cleanedWord = applyWordMultipliers(cleanedWord, wordMultiplierPattern);
+
+        // Calculate the score for the cleaned word
+        int score = 0;
+        for (char letter : cleanedWord.toCharArray()) {
+            score += letterValues.getOrDefault(letter, 0);
+        }
+
+        return score;
+    }
+
+    private String applyLetterMultipliers(String word, String pattern) {
+        Matcher matcher = Pattern.compile(pattern).matcher(word);
+        StringBuffer result = new StringBuffer();
+
+        while (matcher.find()) {
+            String letter = matcher.group(1);
+            String multiplier = matcher.group(2);
+
+            int letterScore = letterValues.getOrDefault(letter.charAt(0), 0);
+            int multiplierValue = Integer.parseInt(multiplier);
+
+            int newScore = letterScore * multiplierValue;
+
+            matcher.appendReplacement(result, Integer.toString(newScore));
+        }
+
+        matcher.appendTail(result);
+        return result.toString();
+    }
+
+    private String applyWordMultipliers(String word, String pattern) {
+        Matcher matcher = Pattern.compile(pattern).matcher(word);
+        StringBuffer result = new StringBuffer();
+
+        while (matcher.find()) {
+            String multiplier = matcher.group(1);
+            int multiplierValue = Integer.parseInt(multiplier);
+
+            matcher.appendReplacement(result, "");
+            result.append(word).append(" "); // Add spaces for word multipliers
+            for (int i = 1; i < multiplierValue; i++) {
+                result.append(word).append(" ");
+            }
+        }
+
+        matcher.appendTail(result);
+        return result.toString().trim(); // Trim any trailing spaces
+    }
+    public static String getPlayerName(int playerNumber) {
+        System.out.print("Enter Player " + playerNumber + " name: ");
+        return scanner.nextLine();
+    }
+
+    public static String getPlayerWord(String playerName) {
+        System.out.print(playerName + ", enter your word: ");
+        return scanner.nextLine();
+    }
+
+    public static void main(String[] args) {
+
+        String player1Name = getPlayerName(1);
+        String player2Name = getPlayerName(2);
+        int player1Score = 0;
+        int player2Score = 0;
+
+        int scoreLimit = 100;
+        boolean isPlayer1Turn = true;
+
+        while (true) {
+            String currentPlayerName;
+            String currentPlayerWord;
+
+            // Determine the current player based on the turn
+            if (isPlayer1Turn) {
+                currentPlayerName = player1Name;
+            } else {
+                currentPlayerName = player2Name;
+            }
+
+            // Get the word from the current player
+            currentPlayerWord = getPlayerWord(currentPlayerName);
+            Scrabble scrabble = new Scrabble(currentPlayerWord);
+            int wordScore = scrabble.score();
+            if (isPlayer1Turn) {
+                // Update player 1's score
+                 player1Score += wordScore;
+            } else {
+                // Update player 2's score
+                 player2Score += wordScore;
+            }
+            System.out.println(currentPlayerName + "'s score: " + wordScore);
+            isPlayer1Turn = !isPlayer1Turn;
+            boolean isTie = false;
+            // Switch turns or end the game based on game rules
+            if (player1Score >= scoreLimit || player2Score >= scoreLimit) {
+                String winner;
+                if (player1Score > player2Score) {
+                    winner = player1Name;
+                } else if (player2Score > player1Score) {
+                    winner = player2Name;
+                } else {
+                    isTie= true;
+                    winner = "It's a tie!";
+                }
+                System.out.println("Game over. " + winner + (isTie ? "":" wins!"));
+                break;
+            }
+        }
+    }
+}
