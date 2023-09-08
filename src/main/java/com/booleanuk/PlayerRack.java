@@ -8,6 +8,7 @@ public class PlayerRack {
 
     public PlayerRack() {
         this.rack = new ArrayList<>();
+        System.out.println("Setting up a Player Rack...");
     }
 
     public int getSize() {
@@ -38,5 +39,13 @@ public class PlayerRack {
 
     public void clearRack() {
         this.rack.clear();
+    }
+
+    public void printRack() {
+        StringBuilder letters = new StringBuilder();
+        for (char letter: rack){
+            letters.append(letter).append(" ");
+        }
+        System.out.println(String.valueOf(letters).strip());
     }
 }
