@@ -27,18 +27,6 @@ public class Scrabble {
         }
     }
 
-//    static {
-//        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
-//                Scrabble.class.getResourceAsStream("/com/booleanuk/resources/dictionary.txt")))) {
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                dictionary.add(line.trim().toUpperCase());
-//            }
-//        } catch (IOException e) {
-//            System.err.println("An error occurred while reading the dictionary file.");
-//            e.printStackTrace();
-//        }
-//    }
     public int score() {
         LetterBag letterBag = new LetterBag();
         List<Tile> playerTiles = new ArrayList<>(letterBag.getAllTiles());
@@ -68,21 +56,25 @@ public class Scrabble {
                 char letter = word.charAt(index);
                 if (letter == '{') {
                     if ((index + 2) >= word.length() || word.charAt(index + 2) != '}') {
+                        System.out.println("Invalid multiplier syntax.");
                         return 0;
                     }
                     letterMultiplier = 2;
                 } else if (letter == '}') {
                     if ((index - 2) < 0 || word.charAt(index - 2) != '{') {
+                        System.out.println("Invalid multiplier syntax.");
                         return 0;
                     }
                     letterMultiplier = 1;
                 } else if (letter == '[') {
                     if ((index + 2) >= word.length() || word.charAt(index + 2) != ']') {
+                        System.out.println("Invalid multiplier syntax.");
                         return 0;
                     }
                     letterMultiplier = 3;
                 } else if (letter == ']') {
                     if ((index - 2) < 0 || word.charAt(index - 2) != '[') {
+                        System.out.println("Invalid multiplier syntax.");
                         return 0;
                     }
                     letterMultiplier = 1;
@@ -100,7 +92,6 @@ public class Scrabble {
                         break;
                     }
                 } else {
-                    System.out.println("Invalid multiplier syntax.");
                     return 0;
                 }
             }
@@ -228,6 +219,7 @@ public class Scrabble {
                 System.out.println("Invalid word. " + currentPlayer.getName() + " loses this turn.");
             }
             if (letterBag.getTiles().isEmpty()) {
+                System.out.println("No more letters in the bag!");
                 printWinner(player1, player2);
                 break;
             }

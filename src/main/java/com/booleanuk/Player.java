@@ -1,8 +1,6 @@
 package com.booleanuk;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Player {
     private String name;
@@ -60,23 +58,24 @@ public class Player {
 
     public void removeFromHandAndDraw(LetterBag letterBag, String word) {
         int removedTileCount = 0;
+        Map<Character, Integer> letterCountInWord = new HashMap<>();
 
         for (char letter : word.toCharArray()) {
-            Tile tileToRemove = null;
+            letterCountInWord.put(letter, letterCountInWord.getOrDefault(letter, 0) + 1);
+        }
 
-            for (int i = 0; i < this.hand.size(); i++) {
-                Tile tile = this.hand.get(i);
-                if (tile.getLetter() == letter) {
-                    tileToRemove = tile;
-                    this.hand.remove(i);
-                    i--;
-                    removedTileCount++;
-                }
-            }
-            if (tileToRemove == null) {
-                continue;
+        Iterator<Tile> iterator = this.hand.iterator();
+        while (iterator.hasNext()) {
+            Tile tile = iterator.next();
+            char letter = tile.getLetter();
+
+            if (letterCountInWord.containsKey(letter) && letterCountInWord.get(letter) > 0) {
+                iterator.remove();
+                letterCountInWord.put(letter, letterCountInWord.get(letter) - 1);
+                removedTileCount++;
             }
         }
+
         List<Tile> newTiles = letterBag.drawTiles(removedTileCount);
         hand.addAll(newTiles);
 
