@@ -75,7 +75,13 @@ public class LetterBag {
         }
         return tiles.remove(0);
     }
+    // Returns a reference to the ArrayList
     public ArrayList<Tile> getTiles() {
         return this.tiles;
+    }
+
+    // Returns a copy of the ArrayList
+    public List<Tile> getAllTiles() {
+        return new ArrayList<>(tiles);
     }
 }

@@ -8,6 +8,14 @@ import java.util.*;
 public class Scrabble {
     private static final Set<String> dictionary = new HashSet<>();
     private static final Scanner scanner = new Scanner(System.in);
+    private String newWord;
+
+    public Scrabble(String newWord) {
+        this.newWord = newWord;
+    }
+
+    public Scrabble() {
+    }
 
     static {
         try (BufferedReader reader = new BufferedReader(new FileReader("C:/Users/Veronique/IdeaProjects/BooleanUK/java-scrabble-challenge/src/main/java/com/booleanuk/resources/dictionary.txt"))) {
@@ -20,7 +28,11 @@ public class Scrabble {
             e.printStackTrace();
         }
     }
-
+    public int score() {
+        LetterBag letterBag = new LetterBag();
+        List<Tile> playerTiles = new ArrayList<>(letterBag.getAllTiles());
+        return score(this.newWord, playerTiles);
+    }
     public static int score(String word, List<Tile> playerTiles) {
         int score = 0;
         int letterMultiplier = 1;
