@@ -23,12 +23,53 @@ class ScrabbleTest {
     }
 
 // CORE FUNCTIONALITY TESTS:
+@Test
+public void shouldGive0ForEmptyWords() {
+    Scrabble scrabble = new Scrabble("");
+    Assertions.assertEquals(0, scrabble.score());
+}
 
     @Test
-    public void shouldGive0ForEmptyWords() {
-        Scrabble scrabble = new Scrabble("");
+    public void shouldGive0ForWhiteSpace() {
+        Scrabble scrabble = new Scrabble("\n\r\t\b\f");
         Assertions.assertEquals(0, scrabble.score());
     }
+
+    @Test
+    public void shouldScore1ForA() {
+        Scrabble scrabble = new Scrabble("a");
+        Assertions.assertEquals(1, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore4ForF() {
+        Scrabble scrabble = new Scrabble("f");
+        Assertions.assertEquals(4, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore6ForStreet() {
+        Scrabble scrabble = new Scrabble("street");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore22ForQuirky() {
+        Scrabble scrabble = new Scrabble("quirky");
+        Assertions.assertEquals(22, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore41ForCaseInsensitiveWord() {
+        Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
+        Assertions.assertEquals(41, scrabble.score());
+    }
+
+//    @Test
+//    public void shouldGive0ForEmptyWords() {
+//        Scrabble scrabble = new Scrabble("");
+//        Assertions.assertEquals(0, scrabble.score());
+//    }
     @Test
     public void shouldGive0ForEmptyWordsOverloaded() {
         int score = Scrabble.score("", player1.getHand());
@@ -36,11 +77,11 @@ class ScrabbleTest {
     }
 
 
-    @Test
-    public void shouldGive0ForWhiteSpace() {
-        Scrabble scrabble = new Scrabble("\n\r\t\b\f");
-        Assertions.assertEquals(0, scrabble.score());
-    }
+//    @Test
+//    public void shouldGive0ForWhiteSpace() {
+//        Scrabble scrabble = new Scrabble("\n\r\t\b\f");
+//        Assertions.assertEquals(0, scrabble.score());
+//    }
     @Test
     public void shouldGive0ForWhiteSpaceOverloaded() {
         int score = Scrabble.score("\n\r\t\b\f", player1.getHand());
@@ -48,11 +89,11 @@ class ScrabbleTest {
     }
 
 
-    @Test
-    public void shouldScore1ForA() {
-        Scrabble scrabble = new Scrabble("a");
-        Assertions.assertEquals(1, scrabble.score());
-    }
+//    @Test
+//    public void shouldScore1ForA() {
+//        Scrabble scrabble = new Scrabble("a");
+//        Assertions.assertEquals(1, scrabble.score());
+//    }
     @Test
     public void shouldScore1ForAOverloaded() {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -62,11 +103,11 @@ class ScrabbleTest {
     }
 
 
-    @Test
-    public void shouldScore4ForF() {
-        Scrabble scrabble = new Scrabble("f");
-        Assertions.assertEquals(4, scrabble.score());
-    }
+//    @Test
+//    public void shouldScore4ForF() {
+//        Scrabble scrabble = new Scrabble("f");
+//        Assertions.assertEquals(4, scrabble.score());
+//    }
     @Test
     public void shouldScore4ForFOverloaded() {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -76,11 +117,11 @@ class ScrabbleTest {
     }
 
 
-    @Test
-    public void shouldScore6ForStreet() {
-        Scrabble scrabble = new Scrabble("street");
-        Assertions.assertEquals(6, scrabble.score());
-    }
+//    @Test
+//    public void shouldScore6ForStreet() {
+//        Scrabble scrabble = new Scrabble("street");
+//        Assertions.assertEquals(6, scrabble.score());
+//    }
     @Test
     public void shouldScore6ForStreetOverloaded() {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -95,11 +136,11 @@ class ScrabbleTest {
     }
 
 
-    @Test
-    public void shouldScore22ForQuirky() {
-        Scrabble scrabble = new Scrabble("quirky");
-        Assertions.assertEquals(22, scrabble.score());
-    }
+//    @Test
+//    public void shouldScore22ForQuirky() {
+//        Scrabble scrabble = new Scrabble("quirky");
+//        Assertions.assertEquals(22, scrabble.score());
+//    }
     @Test
     public void shouldScore22ForQuirkyOverloaded() {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -114,11 +155,11 @@ class ScrabbleTest {
     }
 
 
-    @Test
-    public void shouldScore41ForCaseInsensitiveWord() {
-        Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
-        Assertions.assertEquals(41, scrabble.score());
-    }
+//    @Test
+//    public void shouldScore41ForCaseInsensitiveWord() {
+//        Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
+//        Assertions.assertEquals(41, scrabble.score());
+//    }
     @Test
     public void shouldScore41ForCaseInsensitiveWordOverloaded() {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -165,7 +206,7 @@ class ScrabbleTest {
     }
 
     @Test
-    public void shouldScoreMultipleDoubleLetterMultipliers() {
+    public void shouldScoreMultipleTripleLetterMultipliers() {
         ArrayList<Tile> playerHand = new ArrayList<>();
         playerHand.add(new Tile('F', 4));
         playerHand.add(new Tile('O', 1));
@@ -194,8 +235,8 @@ class ScrabbleTest {
         playerHand.add(new Tile('O', 1));
         playerHand.add(new Tile('G', 2));
 
-        int score = Scrabble.score("[dog]", playerHand);
-        assertEquals(15, score);
+        int score = Scrabble.score("[d{o}g]", playerHand);
+        assertEquals(18, score);
     }
 
     @Test
