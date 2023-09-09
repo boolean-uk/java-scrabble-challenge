@@ -1,8 +1,6 @@
 package com.booleanuk;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Scrabble {
@@ -18,7 +16,7 @@ public class Scrabble {
     }
 
     static {
-        try (BufferedReader reader = new BufferedReader(new FileReader("C:/Users/Veronique/IdeaProjects/BooleanUK/java-scrabble-challenge/src/main/java/com/booleanuk/resources/dictionary.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/java/com/booleanuk/resources/dictionary.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 dictionary.add(line.trim().toUpperCase());
@@ -28,6 +26,19 @@ public class Scrabble {
             e.printStackTrace();
         }
     }
+
+//    static {
+//        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+//                Scrabble.class.getResourceAsStream("/com/booleanuk/resources/dictionary.txt")))) {
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                dictionary.add(line.trim().toUpperCase());
+//            }
+//        } catch (IOException e) {
+//            System.err.println("An error occurred while reading the dictionary file.");
+//            e.printStackTrace();
+//        }
+//    }
     public int score() {
         LetterBag letterBag = new LetterBag();
         List<Tile> playerTiles = new ArrayList<>(letterBag.getAllTiles());
