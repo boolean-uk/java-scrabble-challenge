@@ -45,4 +45,36 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+
+    /*
+     * Below are the tests for the extension part.
+     * */
+
+    @Test
+    public void shouldScore6ForDoubleODog() {
+        Scrabble scrabble = new Scrabble("d{o}g}");
+        Assertions.assertEquals(6, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore7ForTripleODog() {
+        Scrabble scrabble = new Scrabble("d[o]g}");
+        Assertions.assertEquals(7, scrabble.score());
+    }
+
+    @Test
+    public void shouldScore10ForDoubleWordDog() {
+        Scrabble scrabble = new Scrabble("{dog}");
+        Assertions.assertEquals(10, scrabble.score());
+    }
+
+
+    @Test
+    public void shouldScore15ForTripleWordDog() {
+        Scrabble scrabble = new Scrabble("[dog]");
+        Assertions.assertEquals(15, scrabble.score());
+    }
+
+
 }
