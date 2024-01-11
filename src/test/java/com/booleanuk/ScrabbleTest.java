@@ -45,4 +45,26 @@ class ScrabbleTest {
         Scrabble scrabble = new Scrabble("OXyPHEnBUTaZoNE");
         Assertions.assertEquals(41, scrabble.score());
     }
+
+    @Test
+    public void shouldScoreXForCheeseBracket() {
+        Scrabble scrabble = new Scrabble("che[e]se");
+        Assertions.assertEquals(12, scrabble.score());
+    }
+    @Test
+    public void shouldScoreXForCheeseBracketWord() {
+        Scrabble scrabble = new Scrabble("[cheese]");
+        Assertions.assertEquals(22, scrabble.score());
+    }
+
+    @Test
+    public void shouldScoreXForCheeseCurlyBracket() {
+        Scrabble scrabble = new Scrabble("che{e}se");
+        Assertions.assertEquals(13, scrabble.score());
+    }
+    @Test
+    public void shouldScoreXForCheeseCurlyBracketWord() {
+        Scrabble scrabble = new Scrabble("{cheese}");
+        Assertions.assertEquals(33, scrabble.score());
+    }
 }
