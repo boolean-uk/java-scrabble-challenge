@@ -36,58 +36,147 @@ public class Scrabble {
     }
 
     public int score(){
-        boolean doubleWord = false;
-        boolean tripleWord = false;
+        int openSqBracCntr = 0;
+        int openCrlBracCntr = 0;
+        ArrayList<Integer> sqBracScore = new ArrayList<>();
+        ArrayList<Integer> crlBracScore = new ArrayList<>();
+        ArrayList<Integer> sqBracLetterCntr = new ArrayList<>();
+        ArrayList<Integer> crlBracLetterCntr = new ArrayList<>();
+        int bracCntr = 0;
+
         int total = 0;
+        int points = 0;
         String letter = "";
         int wordLength = this.word.length();
-        if (wordLength != 0) {
-            if (this.word.substring(0, 1).equals("{"))
-                doubleWord = true;
-            if (this.word.substring(0, 1).equals("["))
-                tripleWord = true;
-        }
+        int letterLength;
 
+        // Status tracker for last opened bracket. Curly = 1, Square = 2.
+        ArrayList<Integer> bracTracker = new ArrayList<>();
 
+        // Check number of bracket symbols and check for other symbols
         for (int i = 0; i < wordLength; i++) {
-            letter = this.word.substring(i, i + 1);
-            if (pointsMap.containsKey(letter.toUpperCase()))
-                total += pointsMap.get(letter.toUpperCase());
-
-            // Extension
-            if (letter.equals("{") && i != 0) {
-                int scaler = 2;
-                while (true) {
-                    i++;
-                    letter = this.word.substring(i, i + 1);
-                    if (letter.equals("}"))
-                        break;
-                    else {
-                        if (pointsMap.containsKey(letter.toUpperCase()))
-                            total += scaler * pointsMap.get(letter.toUpperCase());
-                    }
-                }
+            letter = this.word.substring(i, i + 1).toUpperCase();
+            if (letter.equals("{") || letter.equals("}") || letter.equals("[") || letter.equals("]")){
+                bracCntr++;
             }
-
-            if (letter.equals("[") && i != 0) {
-                int scaler = 3;
-                while (true) {
-                    i++;
-                    letter = this.word.substring(i, i + 1);
-                    if (letter.equals("]"))
-                        break;
-                    else {
-                        if (pointsMap.containsKey(letter.toUpperCase()))
-                            total += scaler * pointsMap.get(letter.toUpperCase());
-                    }
-                }
-            }
+            else if (!pointsMap.containsKey(letter.toUpperCase()))
+                return 0;
         }
 
-        if (doubleWord)
-            total *= 2;
-        if (tripleWord)
-            total *= 3;
+        letterLength = wordLength - bracCntr;
+
+        // Go through word to count points
+        for (int i = 0; i < wordLength; i++) {
+            letter = this.word.substring(i, i + 1).toUpperCase();
+
+            // If letter add points to total
+            if (pointsMap.containsKey(letter.toUpperCase())) {
+                points = pointsMap.get(letter.toUpperCase());
+                total += points;
+
+                // Keep count of point to be doubled.
+                if (openCrlBracCntr != 0){
+                    for (int j = 0; j < crlBracScore.size(); j++){
+                        crlBracScore.set(j, crlBracScore.get(j)+points);
+                        crlBracLetterCntr.set(j, crlBracLetterCntr.get(j)+1);
+                    }
+                }
+
+                // Keep count of point to be trippled.
+                if (openSqBracCntr != 0){
+                    for (int j = 0; j < sqBracScore.size(); j++){
+                        sqBracScore.set(j, sqBracScore.get(j)+points);
+                        sqBracLetterCntr.set(j, sqBracLetterCntr.get(j)+1);
+                    }
+                }
+            }
+
+            // Detect curly backets
+            if (letter.equals("{")){
+                openCrlBracCntr++;
+                crlBracScore.add(0);
+                crlBracLetterCntr.add(0);
+                bracTracker.add(1);
+            }
+
+            if (letter.equals("}")){
+                // Illegal input
+                if (openCrlBracCntr == 0)
+                    return 0;
+
+                if (bracTracker.get(bracTracker.size()-1) != 1)
+                    return 0;
+                bracTracker.remove(bracTracker.size()-1);
+
+                // Close one open bracket
+                openCrlBracCntr--; // should be same as length of -BracScore
+
+                // detect brackets containing more than one letter and less than the entire word
+                if (crlBracLetterCntr.get(openCrlBracCntr) != letterLength && crlBracLetterCntr.get(openCrlBracCntr) != 1)
+                    return 0;
+                crlBracLetterCntr.remove(openCrlBracCntr);
+
+                points = crlBracScore.get(openCrlBracCntr); // add accumilated score to total score. In effects this doubles the points.
+                total += points;
+
+                if (openCrlBracCntr != 0) {
+                    for (int j = 0; j < openCrlBracCntr; j++) {
+                        crlBracScore.set(j, crlBracScore.get(j) + points);
+                    }
+                }
+                if (openSqBracCntr != 0){
+                    for (int j = 0; j < openSqBracCntr; j++){
+                        sqBracScore.set(j, sqBracScore.get(j)+points);
+                    }
+                }
+
+                crlBracScore.remove(openCrlBracCntr); // Pop from list
+            }
+
+            // Detect square backets
+            if (letter.equals("[")){
+                openSqBracCntr++;
+                sqBracScore.add(0);
+                sqBracLetterCntr.add(0);
+                bracTracker.add(2);
+            }
+
+            if (letter.equals("]")){
+                // Illegal input
+                if (openSqBracCntr == 0)
+                    return 0;
+
+                if (bracTracker.get(bracTracker.size()-1) != 2)
+                    return 0;
+                bracTracker.remove(bracTracker.size()-1);
+
+                // Close one open bracket
+                openSqBracCntr--;
+
+                // detect brackets containing more than one letter and less than the entire word
+                if (sqBracLetterCntr.get(openSqBracCntr) != letterLength && sqBracLetterCntr.get(openSqBracCntr) != 1)
+                    return 0;
+                sqBracLetterCntr.remove(openSqBracCntr);
+
+                points = 2*sqBracScore.get(openSqBracCntr); // add 2xadumilated score to total score. In effects this tripples the points.
+                total += points;
+                if (openSqBracCntr != 0){
+                    for (int j = 0; j < openSqBracCntr; j++){
+                        sqBracScore.set(j, sqBracScore.get(j)+points);
+                    }
+                }
+                if (openCrlBracCntr != 0) {
+                    for (int j = 0; j < openCrlBracCntr; j++) {
+                        crlBracScore.set(j, crlBracScore.get(j) + points);
+                    }
+                }
+
+                sqBracScore.remove(openSqBracCntr); // Pop from list
+            }
+
+        }
+        if (openSqBracCntr != 0 || openCrlBracCntr != 0)
+            return 0;
 
         return total;
     }
