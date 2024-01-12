@@ -4,9 +4,14 @@ public class Scrabble {
     String word;
     public Scrabble(String word) {
         this.word = word.toUpperCase();
-
-        //score();
-        System.out.println(score());
+        if (isValid(word)){
+            //score();
+            System.out.println(score());
+        } else {
+            this.word = "";
+            //score();
+            System.out.println(score());
+        }
 
     }
     public int letterValue(char letter){
@@ -21,6 +26,25 @@ public class Scrabble {
             default -> 0;
         };
         return value;
+    }
+    public boolean isValid(String word) {
+        return word.matches("[a-zA-Z\\[\\]{}]+") && isValidPattern(word);
+    }
+
+    private boolean isValidPattern(String word) {
+        int countSquareBrackets = 0;
+        int countCurlyBrackets = 0;
+
+        for (char letter : word.toCharArray()) {
+            if (letter == '[' || letter == ']') {
+                countSquareBrackets++;
+            } else if (letter == '{' || letter == '}') {
+                countCurlyBrackets++;
+            }
+        }
+
+        // Check if square brackets and curly braces are balanced
+        return countSquareBrackets % 2 == 0 && countCurlyBrackets % 2 == 0;
     }
     public int score() {
         char[] charList = this.word.toCharArray();
@@ -49,3 +73,4 @@ public class Scrabble {
     }
 
 }
+
