@@ -75,13 +75,13 @@ public class Scrabble {
         squigglyBracketIndexEnd = index;
 
         //If letter is within brackets
-        if (openSquiggly && index == squigglyBracketIndexStart + 2) {
+        if (openSquiggly && squigglyBracketIndexEnd == squigglyBracketIndexStart + 2) {
             score += doublePoint;
             openSquiggly = false;
             closedSquiggly = false;
         }
         //If the whole word is in brackets
-        else if (openSquiggly && index == word.length() - 1 && squigglyBracketIndexStart == 0) {
+        else if (openSquiggly && squigglyBracketIndexEnd == word.length() - 1 && squigglyBracketIndexStart == 0) {
             score *= 2;
             openSquiggly = false;
             closedSquiggly = false;
@@ -93,13 +93,13 @@ public class Scrabble {
         squareBracketIndexEnd = index;
 
         //If letter is within brackets
-        if (openSquare && index == squareBracketIndexStart + 2) {
+        if (openSquare && squareBracketIndexEnd == squareBracketIndexStart + 2) {
             score += triplePoint;
             openSquare = false;
             closedSquare = false;
         }
         //If the whole word is in brackets
-        else if (openSquare && index == word.length() - 1 && squareBracketIndexStart == 0) {
+        else if (openSquare && squareBracketIndexEnd == word.length() - 1 && squareBracketIndexStart == 0) {
                 score *= 3;
                 openSquare = false;
                 closedSquare = false;
