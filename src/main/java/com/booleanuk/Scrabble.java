@@ -91,27 +91,4 @@ public class Scrabble {
 
         return total;
     }
-
-    public static void main(String[] args) {
-        Scrabble scrab = new Scrabble("[d[o]g]");
-        System.out.println(Integer.toString(scrab.score()));
-
-
-
-
-
-
-        /*
-        while (true) {
-            System.out.println("What's the word you wish to compute a score for?");
-            userInput = scrab.input.nextLine();
-            if (userInput.toUpperCase().equals("Q"))
-                break;
-            System.out.println("The score for " + userInput + " is " +
-                    Integer.toString(scrab.score()));
-        };
-         */
-
-    }
-
 }
