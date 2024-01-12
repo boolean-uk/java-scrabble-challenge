@@ -19,13 +19,10 @@ public class Scrabble {
 
     public int score() {
         // Return if the word contains illegal characters,
-        // has unclosed brackets or TODO contains illegal multipliers
-        if (containsInvalidTokens() || hasUnclosedBrackets()) {
+        // has unclosed brackets or contains illegal multipliers
+        if (this.word.isEmpty() || containsInvalidTokens() || hasUnclosedBrackets() || hasIllegalMultiplier()) {
             return 0;
         }
-
-        // TODO InvalidMultipliers
-        // TODO malformedNestedMultipliers
 
         int scoreCount = 0;
         // Get score for this word with multiplied letters
@@ -63,15 +60,48 @@ public class Scrabble {
         return false;
     }
 
+    private boolean hasIllegalMultiplier() {
+        // FIXME Bad implementation :(
+        String regex = "\\{[a-zA-Z]{2,}\\}";
+        if (this.word.charAt(0) == '[' || this.word.charAt(0) == '{') {
+            return false;
+        }
+        return this.word.matches(".*" + regex + ".*");
+    }
+
     private boolean hasUnclosedBrackets() {
         int squareBracketCount = 0;
         int curlyBracketCount = 0;
+        boolean squareOpened = false;
+        boolean curlyOpened = false;
+        Stack<Character> sta = new Stack<>();
+
         for (char c : this.word.toCharArray()) {
             switch (c) {
-                case '[' -> squareBracketCount++;
-                case ']' -> squareBracketCount--;
-                case '{' -> curlyBracketCount++;
-                case '}' -> curlyBracketCount--;
+                case '[' -> {
+                    squareBracketCount++;
+                    squareOpened = true;
+                    sta.push('[');
+                }
+                case ']' -> {
+                    if (!squareOpened || !(sta.pop() == '[')) {
+                        return true;
+                    }
+                    squareBracketCount--;
+                    squareOpened = false;
+                }
+                case '{' -> {
+                    curlyBracketCount++;
+                    curlyOpened = true;
+                    sta.push('{');
+                }
+                case '}' -> {
+                    if (!curlyOpened || !(sta.pop() == '{')) {
+                        return true;
+                    }
+                    curlyBracketCount--;
+                    curlyOpened = false;
+                }
             }
         }
         return squareBracketCount != 0 || curlyBracketCount != 0;
