@@ -42,79 +42,67 @@ public class Scrabble {
         int doublePoints = 2;
         int triplePoints = 3;
         int addScore = 0;
-        char [] checkWord = upperCase.toCharArray();
+        char[] checkWord = upperCase.toCharArray();
 
 
         if (checkCurlyBrackest(checkWord)) {
-            for (int i = 0; i < checkWord.length; i++){
+            for (int i = 0; i < checkWord.length; i++) {
                 int charScore = 0;
                 char character = checkWord[i];
-                if (character == '{' && checkWord[i+2]=='}'){
-                    charScore = letterValue.get(checkWord[i+1]);
-                    addScore += (charScore*doublePoints);
+                if (character == '{' && checkWord[i + 2] == '}') {
+                    charScore = letterValue.get(checkWord[i + 1]);
+                    addScore += (charScore * doublePoints);
                     i += 2;
-                }
-                else if (letterValue.containsKey(character)){
+                } else if (letterValue.containsKey(character)) {
                     addScore += letterValue.get(character);
-                }
-
-                else if(doubleTotal(checkWord)){
-                    addScore*= doublePoints;
-                }
-
-                else if(!letterValue.containsValue(charScore)){
+                } else if (doubleTotal(checkWord)) {
+                    addScore *= doublePoints;
+                } else if (!letterValue.containsValue(charScore)) {
                     return 0;
-                }
-
-                else {
+                } else {
                     return addScore;
                 }
             }
-        }
-        else if (checkSquareBrackest(checkWord)){
-            for (int i = 0; i < checkWord.length; i++){
+        } else if (checkSquareBrackest(checkWord)) {
+            for (int i = 0; i < checkWord.length; i++) {
                 int charScore = 0;
                 char character = checkWord[i];
-                if (character == '[' && checkWord[i+2]==']'){
-                    charScore = letterValue.get(checkWord[i+1]);
+                if (character == '[' && checkWord[i + 2] == ']') {
+                    charScore = letterValue.get(checkWord[i + 1]);
                     addScore += charScore * triplePoints;
                     i += 2;
-                }
-                else if (letterValue.containsKey(character)){
+                } else if (letterValue.containsKey(character)) {
                     addScore += letterValue.get(character);
-                }
-                else if(tripleTotal(checkWord)){
-                    addScore*= triplePoints;
-                }
-                else if(!letterValue.containsValue(charScore)){
+                } else if (tripleTotal(checkWord)) {
+                    addScore *= triplePoints;
+                } else if (!letterValue.containsValue(charScore)) {
                     return 0;
-                }
-
-                else {
+                } else {
                     return addScore;
                 }
 
 
             }
-
-        }else if (!checkCurlyBrackest(checkWord) || !checkSquareBrackest(checkWord)) {
-            return addScore;
         }
-
-        else {
+        else{
             for (int i = 0; i < checkWord.length; i++) {
                 char character = checkWord[i];
                 if (letterValue.containsKey(character)) {
                     addScore += letterValue.get(character);
 
-                }
-
-                else {
+                } else {
                     addScore = 0;
                 }
             }
 
         }
+
+        /*  Destroy's the core tests, but allowes some tests in the extension to pass through
+        if (!checkCurlyBrackest(checkWord) || !checkSquareBrackest(checkWord)) {
+            return addScore;
+        }
+
+         */
 
         return addScore;
     }
