@@ -40,15 +40,20 @@ public class Scrabble {
                 case "{":
                     squiggly = true;
                     openingBracket(i);
+                    break;
                 case "}":
                     closingBracket(letter, i);
+                    break;
                 case "[":
                     square = true;
                     openingBracket(i);
+                    break;
                 case "]":
                     closingBracket(letter, i);
+                    break;
                 default:
                     letterIsNotBracket(letter, i);
+                    break;
             }
         }
 
