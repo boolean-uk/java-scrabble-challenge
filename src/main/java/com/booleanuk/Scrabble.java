@@ -58,7 +58,14 @@ public class Scrabble {
         for (int i = 0; i < word.length(); i++) {
             char letter = word.charAt(i);
 
+            if (letter == '{' || letter == '[' || letter == '(' || letter == '<') {
 
+                int closingIndex = word.indexOf(getClosingBracket(letter), i + 1);
+                if (closingIndex != -1) {
+                    String multiplierContent = word.substring(i + 1, closingIndex);
+                    int multiplierScore = scoreMultiplierContent(multiplierContent);
+                }
+            }
 
             if (letter == '{') {
                 doubleLetter = true;
@@ -105,5 +112,28 @@ public class Scrabble {
 
         return score;
     }
+
+
+    public char getClosingBracket(char openingBracket) {
+        switch (openingBracket) {
+            case '{':
+                return '}';
+            case '[':
+                return ']';
+            case '(':
+                return ')';
+            case '<':
+                return '>';
+            default:
+                throw new IllegalArgumentException("Invalid opening bracket: " + openingBracket);
+        }
+    }
+
+    public int scoreMultiplierContent(String content) {
+        Scrabble multiplierScrabble = new Scrabble(content);
+        return multiplierScrabble.score();
+    }
+
 }
+
 
