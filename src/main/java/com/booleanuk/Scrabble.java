@@ -9,7 +9,7 @@ public class Scrabble {
 
     public static void main(String[] args) {
         //Scrabble s_1 = new Scrabble("{[dog]}");
-        Scrabble s_2 = new Scrabble("h]ello");
+        Scrabble s_2 = new Scrabble("{[d]og}");
         //Scrabble s_3 = new Scrabble("he{ll}o");
         System.out.println(s_2.score());
         //s.score();
@@ -22,8 +22,8 @@ public class Scrabble {
         String wordString = new String(this.arr);
         int score = 0;
         int multiplier = 1;
-        int wholeWordDoubler = 1;
-        int wholeWordTripler = 1;
+        int doubleWord = 1;
+        int tripleWOrd = 1;
 
         // Check for invalid tokens ! and |
         if (wordString.matches(".*[!|].*")) {
@@ -44,7 +44,16 @@ public class Scrabble {
             }
         }
 
-        // Check for invalid multipliers
+        // Check for correct use of multipliers
+        if (wordString.matches("\\{[A-Za-z]+\\}") || wordString.matches("\\[[A-Za-z]+\\]")) {
+            // The whole word is correctly enclosed, proceed with scoring
+        } else if (wordString.matches(".*\\{[A-Za-z]\\}.*") || wordString.matches(".*\\[[A-Za-z]\\].*")) {
+            // Correctly used for single letters, proceed with scoring
+        } else if ((wordString.contains("{") || wordString.contains("}") || wordString.contains("[") || wordString.contains("]")) && !wordString.matches("^\\{\\[[A-Za-z]+]}$")) {
+          // Incorrect use of multipliers
+          return 0;
+        }
+        //Check for invalid multipliers
         Stack<Character> stack_curly = new Stack<Character>();
         Stack<Character> stack_square = new Stack<Character>();
 
@@ -62,10 +71,10 @@ public class Scrabble {
             }
         }
 
-
         if (!stack_curly.isEmpty() || !stack_square.isEmpty()) {
             return 0;
         }
+
 
         // Point scoring
         for (int i = 0; i < this.arr.length; i++) {
@@ -73,12 +82,11 @@ public class Scrabble {
             // Check for whole double words
             if (wordString.matches("\\{[A-Za-z]+\\}")) {
                 multiplier = 2;
-                wholeWordDoubler = 2;
+
             }
             // Check for whole triple words
             else if (wordString.matches("\\[[A-Za-z]+\\]")) {
                 multiplier = 3;
-                wholeWordTripler = 3;
             }
             // Check for whole triple-double words square-curly
             else if (wordString.matches("^\\[\\{[A-Za-z]+}]$")) {
@@ -99,7 +107,9 @@ public class Scrabble {
             score += this.map.get(currentChar) * multiplier;
                 multiplier = 1;
         }
-
+        if (wordString.matches("\\{\\[.*[^\\]}]\\}")) {
+            return score * 2;
+        }
         return score;
     }
 
