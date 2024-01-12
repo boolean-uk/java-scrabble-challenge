@@ -4,12 +4,10 @@ import java.util.HashMap;
 
 public class Scrabble {
     HashMap<Character,Integer> letterValue = new HashMap<>();
-    int score;
     String upperCase;
 
 
     public Scrabble(String word) {
-        score = 0;
         letterValue.put('A',1);
         letterValue.put('B',3);
         letterValue.put('C',3);
@@ -43,31 +41,143 @@ public class Scrabble {
     public int score() {
         int doublePoints = 2;
         int triplePoints = 3;
-
-
         int addScore = 0;
-        for (int i = 0; i < upperCase.length(); i++) {
-            char character = upperCase.charAt(i);
-            if (letterValue.containsKey(character)) {
+        char [] checkWord = upperCase.toCharArray();
 
-                if ((upperCase.charAt(i) == '{') && (upperCase.charAt(i + 2) == '}')) {
-                    addScore += (letterValue.get(upperCase.charAt(i+1))) * doublePoints;
+
+        if (checkCurlyBrackest(checkWord)) {
+            for (int i = 0; i < checkWord.length; i++){
+                int charScore = 0;
+                char character = checkWord[i];
+                if (character == '{' && checkWord[i+2]=='}'){
+                    charScore = letterValue.get(checkWord[i+1]);
+                    addScore += (charScore*doublePoints);
+                    i += 2;
                 }
-                else if ((upperCase.charAt(i) == '[') && (upperCase.charAt(i + 2) == ']')) {
-                    addScore += (letterValue.get(upperCase.charAt(i+1))) * triplePoints;
+                else if (letterValue.containsKey(character)){
+                    addScore += letterValue.get(character);
                 }
+
+                else if(doubleTotal(checkWord)){
+                    addScore*= doublePoints;
+                }
+
+                else if(!letterValue.containsValue(charScore)){
+                    return 0;
+                }
+
                 else {
-                    addScore = letterValue.get(character);
-                    score += addScore;
+                    return addScore;
                 }
-
-            } else {
-                score += 0;
             }
         }
+        else if (checkSquareBrackest(checkWord)){
+            for (int i = 0; i < checkWord.length; i++){
+                int charScore = 0;
+                char character = checkWord[i];
+                if (character == '[' && checkWord[i+2]==']'){
+                    charScore = letterValue.get(checkWord[i+1]);
+                    addScore += charScore * triplePoints;
+                    i += 2;
+                }
+                else if (letterValue.containsKey(character)){
+                    addScore += letterValue.get(character);
+                }
+                else if(tripleTotal(checkWord)){
+                    addScore*= triplePoints;
+                }
+                else if(!letterValue.containsValue(charScore)){
+                    return 0;
+                }
+
+                else {
+                    return addScore;
+                }
 
 
-        return score;
+            }
+
+        }else if (!checkCurlyBrackest(checkWord) || !checkSquareBrackest(checkWord)) {
+            return addScore;
+        }
+
+        else {
+            for (int i = 0; i < checkWord.length; i++) {
+                char character = checkWord[i];
+                if (letterValue.containsKey(character)) {
+                    addScore += letterValue.get(character);
+
+                }
+
+                else {
+                    addScore = 0;
+                }
+            }
+
+        }
+
+        return addScore;
+    }
+
+    public boolean checkCurlyBrackest(char [] checkBracket){
+        int amountOpen = 0;
+        int amountClosed = 0;
+        for(int i = 0; i < checkBracket.length; i++){
+            char chacracter = checkBracket[i];
+            if (chacracter == '{'){
+                if (checkBracket[i+2]== '}' && i+2 < checkBracket.length){
+                    return true;
+                }
+                amountOpen++;
+            } else if (chacracter == '}' && i-2 > -1) {
+                amountClosed++;
+            }
+            if ((amountClosed == amountOpen) && amountOpen > 0){
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public boolean checkSquareBrackest(char [] checkBracket){
+        int amountOpen = 0;
+        int amountClosed = 0;
+        for(int i = 0; i < checkBracket.length; i++){
+            char chacracter = checkBracket[i];
+            if (chacracter == '['){
+                if (checkBracket[i+2] == ']' && i+2 < checkBracket.length){
+                    return true;
+                }
+                amountOpen++;
+            } else if (chacracter == ']' && i-2 > -1) {
+                amountClosed++;
+            }
+            if ((amountClosed == amountOpen) && amountOpen > 0){
+                return true;
+            }
+        }return false;
+
+    }
+    public boolean doubleTotal(char [] checkDoubles){
+
+        for (int i = 0; i < checkDoubles.length; i++){
+            if (checkDoubles[0] == '{' && checkDoubles[checkDoubles.length -1]== '}'){
+                return true;
+            }
+        }
+        return false;
+
+    }
+    public boolean tripleTotal(char [] checkDoubles){
+
+        for (int i = 0; i < checkDoubles.length; i++){
+            if (checkDoubles[0] == '[' && checkDoubles[checkDoubles.length -1]== ']'){
+                return true;
+            }
+        }
+        return false;
+
     }
 
 }
