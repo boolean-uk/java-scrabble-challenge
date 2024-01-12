@@ -2,7 +2,6 @@ package com.booleanuk;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import static java.lang.Character.isLetter;
 
 public class Scrabble {
@@ -11,10 +10,15 @@ public class Scrabble {
     int score = 0;
     int doublePoint = 0;
     int triplePoint = 0;
-    int bracketIndex = 0;
+    int squigglyBracketIndexStart = 0;
+    int squigglyBracketIndexEnd = 0;
+    int squareBracketIndexStart = 0;
+    int squareBracketIndexEnd = 0;
     boolean breakLoop = false;
-    boolean squiggly = false;
-    boolean square = false;
+    boolean openSquiggly = false;
+    boolean closedSquiggly = false;
+    boolean openSquare = false;
+    boolean closedSquare = false;
 
     public Scrabble(String word) {
         this.word = word;
@@ -38,65 +42,78 @@ public class Scrabble {
 
             switch(letter) {
                 case "{":
-                    squiggly = true;
-                    openingBracket(i);
-                    break;
-                case "}":
-                    closingBracket(letter, i);
+                    openSquiggly = true;
+                    squigglyBracketIndexStart = i;
                     break;
                 case "[":
-                    square = true;
-                    openingBracket(i);
+                    openSquare = true;
+                    squareBracketIndexStart = i;
+                    break;
+                case "}":
+                    closingSquigglyBracket(i);
                     break;
                 case "]":
-                    closingBracket(letter, i);
+                    closingSquareBracket(i);
                     break;
                 default:
                     letterIsNotBracket(letter, i);
                     break;
             }
-        }
 
+            //If there is an invalid bracket
+            if (i == word.length()-1) {
+                if(openSquare || openSquiggly || closedSquare || closedSquiggly) {
+                    score = 0;
+                }
+            }
+        }
         return score;
     }
 
-    private void openingBracket(int index) {
-        bracketIndex = index;
+    private void closingSquigglyBracket(int index) {
+        closedSquiggly = true;
+        squigglyBracketIndexEnd = index;
+
+        //If letter is within brackets
+        if (openSquiggly && index == squigglyBracketIndexStart + 2) {
+            score += doublePoint;
+            openSquiggly = false;
+            closedSquiggly = false;
+        }
+        //If the whole word is in brackets
+        else if (openSquiggly && index == word.length() - 1 && squigglyBracketIndexStart == 0) {
+            score *= 2;
+            openSquiggly = false;
+            closedSquiggly = false;
+        }
     }
 
-    private void closingBracket(String letter, int index) {
-        //If a letter is within brackets
-        if (squiggly && index == bracketIndex + 2) {
-            if(letter.equalsIgnoreCase("}")) {
-                score += doublePoint;
-            }
-            else if(square && letter.equalsIgnoreCase("]")){
-                score += triplePoint;
-            }
-        }
+    private void closingSquareBracket(int index) {
+        closedSquare = true;
+        squareBracketIndexEnd = index;
 
-        //If the whole word is in brackets. obs kolla så openedBracket är på index 0.
-        else if (index == word.length() - 1) {
-            if(squiggly && letter.equalsIgnoreCase("}")) {
-                score *= 2;
-            }
-            else if(square && letter.equalsIgnoreCase("]")){
+        //If letter is within brackets
+        if (openSquare && index == squareBracketIndexStart + 2) {
+            score += triplePoint;
+            openSquare = false;
+            closedSquare = false;
+        }
+        //If the whole word is in brackets
+        else if (openSquare && index == word.length() - 1 && squareBracketIndexStart == 0) {
                 score *= 3;
+                openSquare = false;
+                closedSquare = false;
             }
-        }
-
-        //If there is no closing bracket or more than one letter between brackets
-
     }
 
-    private void letterIsNotBracket(String letter, int index) {
-        //If there is an invalid token
+    private void letterIsNotBracket(String letterInWord, int index) {
+        //If letterInWord is an invalid token
         if(!isLetter(word.charAt(index))) {
             score = 0;
             breakLoop = true;
         }
 
-        //If it's a letter
+        //If letterInWord is a letter
         else {
             for (Map.Entry<String, Integer> entry : map.entrySet()) {
                 String key = entry.getKey();
@@ -106,9 +123,9 @@ public class Scrabble {
                 triplePoint = (value * 3) - value;
 
                 for (int j = 0; j < key.length(); j++) {
-                    String s = String.valueOf(key.charAt(j));
+                    String letterInMap = String.valueOf(key.charAt(j));
 
-                    if (s.equalsIgnoreCase(letter)) {
+                    if (letterInMap.equalsIgnoreCase(letterInWord)) {
                         score += value;
                     }
                 }
