@@ -4,51 +4,53 @@ import java.sql.SQLOutput;
 import java.util.HashMap;
 
 public class Scrabble {
-    HashMap<String,Integer> letters;
+    HashMap<String, Integer> letters;
     String word;
-    public Scrabble(String word){
+
+    public Scrabble(String word) {
         this.letters = new HashMap<>();
         this.word = word;
         //Score applying
-        this.letters.put("A",1);
-        this.letters.put("E",1);
-        this.letters.put("I",1);
-        this.letters.put("O",1);
-        this.letters.put("U",1);
-        this.letters.put("L",1);
-        this.letters.put("N",1);
-        this.letters.put("R",1);
-        this.letters.put("S",1);
-        this.letters.put("T",1);
-        this.letters.put("D",2);
-        this.letters.put("G",2);
-        this.letters.put("B",3);
-        this.letters.put("C",3);
-        this.letters.put("M",3);
-        this.letters.put("P",3);
-        this.letters.put("F",4);
-        this.letters.put("H",4);
-        this.letters.put("V",4);
-        this.letters.put("W",4);
-        this.letters.put("Y",4);
-        this.letters.put("K",5);
-        this.letters.put("J",8);
-        this.letters.put("X",8);
-        this.letters.put("Q",10);
-        this.letters.put("Z",10);
+        this.letters.put("A", 1);
+        this.letters.put("E", 1);
+        this.letters.put("I", 1);
+        this.letters.put("O", 1);
+        this.letters.put("U", 1);
+        this.letters.put("L", 1);
+        this.letters.put("N", 1);
+        this.letters.put("R", 1);
+        this.letters.put("S", 1);
+        this.letters.put("T", 1);
+        this.letters.put("D", 2);
+        this.letters.put("G", 2);
+        this.letters.put("B", 3);
+        this.letters.put("C", 3);
+        this.letters.put("M", 3);
+        this.letters.put("P", 3);
+        this.letters.put("F", 4);
+        this.letters.put("H", 4);
+        this.letters.put("V", 4);
+        this.letters.put("W", 4);
+        this.letters.put("Y", 4);
+        this.letters.put("K", 5);
+        this.letters.put("J", 8);
+        this.letters.put("X", 8);
+        this.letters.put("Q", 10);
+        this.letters.put("Z", 10);
 
 
     }
-    public int score(){
-        int scoreAmount=0;
+
+    public int score() {
+        int scoreAmount = 0;
         int wordMultiplier = 0;
         int doubleMultiplier = 0;
         int tripleMultiplier = 0;
-        this.word = word.replaceAll("\\p{C}","");
+        this.word = word.replaceAll("\\p{C}", "");
         this.word = word.toUpperCase();
 
         //First check if the word is a word
-        if (this.word.isEmpty()){
+        if (this.word.isEmpty()) {
             return 0;
         }//End of word exists check
         //If it exists, check the word for wordmultipliers and letter multipliers
@@ -62,29 +64,38 @@ public class Scrabble {
                 char firstChar = word.charAt(0);
                 char lastChar = word.charAt(word.length() - 1);
                 //Checker for lettermultiplier
-                char closedBrack = word.charAt(2);
+                char closedBrack;
+                if (word.length()>1){
+                    closedBrack=word.charAt(2);
+                }else{
+                    closedBrack=' ';
+                }
                 if (String.valueOf(firstChar).equals("{") && String.valueOf(lastChar).equals("}")) {
                     //Checks if its just a lettermultiplier
-                    if(!String.valueOf(closedBrack).equals("}")) {
+                    if (!String.valueOf(closedBrack).equals("}")) {
                         //Apply multiplier
                         doubleMultiplier += 1;
                         //Remove the first bracket so the word can be checked later
                         word = word.substring(1);
                         //Remove the last bracket
                         word = word.substring(0, word.length() - 1);
-                    } else{
-                        bool=false;
+                    } else {
+                        //Stops if it is a lettermultiplier
+                        System.out.println("1stop");
+                        bool = false;
                     }
 
                 } else if (String.valueOf(firstChar).equals("[") && String.valueOf(lastChar).equals("]")) {
-                    if(!String.valueOf(closedBrack).equals("}")) {
+                    if (!String.valueOf(closedBrack).equals("}")) {
                         tripleMultiplier += 1;
                         word = word.substring(1);
                         word = word.substring(0, word.length() - 1);
-                    }else{
-                        bool=false;
+                    } else {
+                        System.out.println("2stop");
+                        bool = false;
                     }
                 } else {
+                    System.out.println("3stop");
                     bool = false;
                 }
             }
@@ -94,63 +105,61 @@ public class Scrabble {
                 char wordChar = word.charAt(i);
                 //Check if the positive direction exists
                 char brackCheckPos;
-                if (i+2 <word.length()){
-                    brackCheckPos=word.charAt(i+2);
-                }else{
+                if (i + 2 < word.length()) {
+                    brackCheckPos = word.charAt(i + 2);
+                } else {
                     brackCheckPos = ' ';
                 }
                 //Check if the negative position exists
                 char brackCheckNeg;
-                if (i-2>=0){
-                    brackCheckNeg = word.charAt(i-2);
-                }else{
+                if (i - 2 >= 0) {
+                    brackCheckNeg = word.charAt(i - 2);
+                } else {
                     brackCheckNeg = ' ';
                 }
                 //checks if the letter is between curlbrackets
-                if (String.valueOf(wordChar).equals("{") & String.valueOf(brackCheckPos).equals("}")){
-                    newWord += word.charAt(i+1);
+                if (String.valueOf(wordChar).equals("{") & String.valueOf(brackCheckPos).equals("}")) {
+                    newWord += word.charAt(i + 1);
                     //Checks if the curl has ended
-                }else if (String.valueOf(wordChar).equals("}") & String.valueOf(brackCheckNeg).equals("{")){
-                    newWord+="";
+                } else if (String.valueOf(wordChar).equals("}") & String.valueOf(brackCheckNeg).equals("{")) {
+                    newWord += "";
                     //Checks if the letter is between normal brackets
-                } else if (String.valueOf(wordChar).equals("[") & String.valueOf(brackCheckPos).equals("]")){
-                    char multi = word.charAt(i+1);
+                } else if (String.valueOf(wordChar).equals("[") & String.valueOf(brackCheckPos).equals("]")) {
+                    char multi = word.charAt(i + 1);
                     newWord = newWord + multi + multi;
                     //Checks if the normal bracket has ended
-                } else if (String.valueOf(wordChar).equals("]") & String.valueOf(brackCheckNeg).equals("[")){
+                } else if (String.valueOf(wordChar).equals("]") & String.valueOf(brackCheckNeg).equals("[")) {
                     newWord += "";
                     //checks if the char is a letter that exists in the hashmap
-                } else if (letters.containsKey(String.valueOf(wordChar))){
+                } else if (letters.containsKey(String.valueOf(wordChar))) {
                     newWord += word.charAt(i);
-                }else{
+                } else {
                     return 0;
                 }
             }
 
             for (int i = 0; i < newWord.length(); i++) {
-
                 char wordChar = newWord.charAt(i);
                 int singleScore = this.letters.get(String.valueOf(wordChar));
-                scoreAmount += singleScore;
-
+                scoreAmount = scoreAmount + singleScore;
             }
         }
-        if (wordMultiplier == 0){
-            wordMultiplier+=1;
+        if (wordMultiplier == 0) {
+            wordMultiplier += 1;
         }
-        if (doubleMultiplier!=0){
-            doubleMultiplier = doubleMultiplier*2;
-            scoreAmount = scoreAmount*doubleMultiplier;
+        if (doubleMultiplier != 0) {
+            doubleMultiplier = doubleMultiplier * 2;
+            scoreAmount = scoreAmount * doubleMultiplier;
         }
-        if (tripleMultiplier!=0){
-            tripleMultiplier = tripleMultiplier*3;
-            scoreAmount = scoreAmount*tripleMultiplier;
+        if (tripleMultiplier != 0) {
+            tripleMultiplier = tripleMultiplier * 3;
+            scoreAmount = scoreAmount * tripleMultiplier;
         }
-        return scoreAmount*wordMultiplier;
+        return scoreAmount * wordMultiplier;
     }
 
     public static void main(String[] args) {
-        Scrabble scrabble = new Scrabble("{[dog]}");
+        Scrabble scrabble = new Scrabble("{d}o{g}");
         System.out.println(scrabble.score());
 
 /*
@@ -247,7 +256,8 @@ public class Scrabble {
 
 */
     }
-
-
-
 }
+
+
+
+
