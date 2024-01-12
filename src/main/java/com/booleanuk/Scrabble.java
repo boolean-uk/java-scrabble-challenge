@@ -24,11 +24,27 @@ public class Scrabble {
     }
     public int score() {
         char[] charList = this.word.toCharArray();
-
         int points = 0;
+        int curlyBrackets = 1;
+        int squareBracket = 1;
+
+        // Only works for valid strings
         for (char letter : charList) {
-        points += letterValue(letter);
+            if (letter == '{'){
+                curlyBrackets = 2;
+            }
+            if (letter == '}'){
+                curlyBrackets = 1;
+            }
+            if (letter == '['){
+                squareBracket = 3;
+            }
+            if (letter == ']'){
+                squareBracket = 1;
+            }
+        points += letterValue(letter) * curlyBrackets * squareBracket;
         }
+
         return points;
     }
 
