@@ -1,9 +1,10 @@
-package com.booleanuk;
+package com.booleanuk.core;
 
+import com.booleanuk.Scrabble;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class ScrabbleTest {
+class ScrabbleCoreTest {
     @Test
     public void shouldGive0ForEmptyWords() {
         Scrabble scrabble = new Scrabble("");

@@ -5,6 +5,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Scrabble {
+    public Scrabble(String word) {
+
+    }
+
+    public int score() {
+        return -1;
+    }
 
     private String guess;
     private int score = 0;
