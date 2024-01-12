@@ -18,9 +18,8 @@ public class Scrabble {
             return 0;
         }
 
-        currentWordMultiplier = findWordMultiplier();
-
-        while(currentWordMultiplier > 1) {
+        //calculate total word multiplier
+        do {
             currentWordMultiplier = findWordMultiplier();
             totalWordMultiplier *= currentWordMultiplier;
 
@@ -28,7 +27,7 @@ public class Scrabble {
             if (currentWordMultiplier > 1) {
                 word = word.substring(1, word.length()-1);
             }
-        }
+        } while(currentWordMultiplier > 1);
 
         char[] characters = word.toCharArray();
         int total = 0;
