@@ -49,7 +49,12 @@ public class Scrabble {
             } else if (letter == ']') {
                 tripleScore = false;
             } else {
-                int letterScore = letterValues.get(letter);
+                int letterScore;
+                if (letterValues.get(letter) == null) {
+                    letterScore = 0;
+                } else {
+                    letterScore = letterValues.get(letter);
+                }
                 if (doubleScore) {
                     letterScore *= 2;
                 } else if (tripleScore) {
