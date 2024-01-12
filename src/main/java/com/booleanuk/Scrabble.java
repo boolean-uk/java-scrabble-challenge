@@ -70,9 +70,9 @@ public class Scrabble {
 
     }
 
-    public static void main(String[] args) {
-        Scrabble scrabble = new Scrabble("hi");
-        System.out.println(scrabble.score());
-        scrabble = new Scrabble("\nextra");
-    }
+//    public static void main(String[] args) {
+//        Scrabble scrabble = new Scrabble("hi");
+//        System.out.println(scrabble.score());
+//        scrabble = new Scrabble("\nextra");
+//    }
 }
