@@ -112,8 +112,7 @@ public class Scrabble {
             score = 0;
             breakLoop = true;
         }
-
-        //If letterInWord is a letter
+        
         else {
             for (Map.Entry<String, Integer> entry : map.entrySet()) {
                 String key = entry.getKey();
