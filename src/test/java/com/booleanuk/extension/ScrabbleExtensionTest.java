@@ -23,8 +23,9 @@ public class ScrabbleExtensionTest {
         Assertions.assertEquals(0, scrabble1.score());
         Scrabble scrabble2 = new Scrabble("h]ello");
         Assertions.assertEquals(0, scrabble2.score());
-        Scrabble scrabble3 = new Scrabble("he{ll}o");
-        Assertions.assertEquals(0, scrabble3.score());
+        //This test looks like it should not be invalid?
+        Scrabble scrabble = new Scrabble("he{ll}o");
+        Assertions.assertEquals(0, scrabble.score());
         Scrabble scrabble4 = new Scrabble("h[ell}o");
         Assertions.assertEquals(0, scrabble4.score());
         Scrabble scrabble5 = new Scrabble("h}e{llo");
