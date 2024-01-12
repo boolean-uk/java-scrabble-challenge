@@ -5,8 +5,8 @@ import java.util.HashMap;
 
 public class Scrabble {
 
-    HashMap<Character, Integer> hashMap = new HashMap<>();
-    String word;
+    HashMap<Character, Integer> lettersMap = new HashMap<>();
+
     int score = 0;
     int multiplier = 1;
     int lettersInBracket = 0;
@@ -14,55 +14,55 @@ public class Scrabble {
     boolean isCurlyBracketOpen = false;
     boolean isSquareBracketOpen = false;
     boolean isError = false;
-    public void createHashMap(){
+    public void lettersScore(){
 
-        hashMap.put('A', 1);
-        hashMap.put('E', 1);
-        hashMap.put('I', 1);
-        hashMap.put('O', 1);
-        hashMap.put('U', 1);
-        hashMap.put('L', 1);
-        hashMap.put('N', 1);
-        hashMap.put('R', 1);
-        hashMap.put('S', 1);
-        hashMap.put('T', 1);
-        hashMap.put('D', 2);
-        hashMap.put('G', 2);
-        hashMap.put('B', 3);
-        hashMap.put('C', 3);
-        hashMap.put('M', 3);
-        hashMap.put('P', 3);
-        hashMap.put('F', 4);
-        hashMap.put('H', 4);
-        hashMap.put('V', 4);
-        hashMap.put('W', 4);
-        hashMap.put('Y', 4);
-        hashMap.put('K', 5);
-        hashMap.put('J', 8);
-        hashMap.put('X', 8);
-        hashMap.put('Q', 10);
-        hashMap.put('Z', 10);
+        lettersMap.put('A', 1);
+        lettersMap.put('E', 1);
+        lettersMap.put('I', 1);
+        lettersMap.put('O', 1);
+        lettersMap.put('U', 1);
+        lettersMap.put('L', 1);
+        lettersMap.put('N', 1);
+        lettersMap.put('R', 1);
+        lettersMap.put('S', 1);
+        lettersMap.put('T', 1);
+        lettersMap.put('D', 2);
+        lettersMap.put('G', 2);
+        lettersMap.put('B', 3);
+        lettersMap.put('C', 3);
+        lettersMap.put('M', 3);
+        lettersMap.put('P', 3);
+        lettersMap.put('F', 4);
+        lettersMap.put('H', 4);
+        lettersMap.put('V', 4);
+        lettersMap.put('W', 4);
+        lettersMap.put('Y', 4);
+        lettersMap.put('K', 5);
+        lettersMap.put('J', 8);
+        lettersMap.put('X', 8);
+        lettersMap.put('Q', 10);
+        lettersMap.put('Z', 10);
+
     }
-
     public Scrabble(String word) {
-        createHashMap();
-        this.word = word.toUpperCase();
+        lettersScore();
+        String capitalWord = word.toUpperCase();
 
-        for (int i = 0; i < word.length(); i++){
+        for (int i = 0; i < capitalWord.length(); i++){
 
-            char letter = word.charAt(i);
+            char letter = capitalWord.charAt(i);
 
             if (letter == '{' || letter == '['){
                 bracketOpened(letter);
             }
             else if (letter == '}' || letter ==']'){
-                bracketClosed(letter, word);
+                bracketClosed(letter, capitalWord);
             }
             else if (Character.isLetter(letter)){
                 if (isCurlyBracketOpen || isSquareBracketOpen){
                     this.lettersInBracket += 1;
                 }
-                this.score += hashMap.get(letter) * multiplier;
+                this.score += lettersMap.get(letter) * multiplier;
             }else {
                 this.isError = true;
             }
@@ -87,13 +87,13 @@ public class Scrabble {
             this.isSquareBracketOpen = true;
             multiplier *= 3;
         }
+
     }
 
     public void bracketClosed(Character c, String word){
 
         if (c == '}'){
             if(!isCurlyBracketOpen){
-                // Bracket isnt open, invalid
                 this.isError = true;
 
             }else{
@@ -112,7 +112,6 @@ public class Scrabble {
             }
         } else if (c == ']'){
             if(!isSquareBracketOpen){
-                //bracket isnt open, invalid
                 this.isError = true;
             }
             if (this.lettersInBracket == 1){
@@ -120,6 +119,7 @@ public class Scrabble {
                 this.lettersInBracket = 0;
                 this.isSquareBracketOpen = false;
             } else{
+                //This needs to be reworked, right now it wouldn't pass if the double brackets for the entire word was reversed
                 if ((c == word.charAt(word.length()-1)) || (c == word.charAt(word.length()-2))) {
                     this.isSquareBracketOpen = false;
                 }
@@ -129,6 +129,7 @@ public class Scrabble {
             }
         }
     }
+
 
     public int score() {
         return this.score;
