@@ -35,6 +35,9 @@ public class Scrabble {
                 score += scoreCalc(character, charList);
             }
         }
+        if (checkBonusWord(word) != 1){
+            score = score*checkBonusWord(word);
+        }
         return score;
     }
 
@@ -42,5 +45,32 @@ public class Scrabble {
         if (charList.contains(character)){
             return scoreMap.get(charList);
         } else return 0;
+    }
+
+    public void checkBonusLetter(String word){
+        /*
+        String doublePattern = "\{[a-z]?\}";
+        String triplePattern = "\[[a-z]?\]";
+        if (word.matches(doublePattern)){
+
+        } else if (word.matches(triplePattern)){
+
+        }
+
+         */
+    }
+
+    public int checkBonusWord(String word){
+        if (word.startsWith("[{") && word.endsWith("}]") ||
+                word.startsWith("{[") && word.endsWith("]}")){
+            return 6;
+        }
+        if (word.startsWith("{") && word.endsWith("}")){
+            return 2;
+        }
+        if (word.startsWith("[") && word.endsWith("]")){
+            return 3;
+        }
+        return 1;
     }
 }
