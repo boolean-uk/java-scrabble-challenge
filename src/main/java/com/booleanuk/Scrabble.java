@@ -18,6 +18,9 @@ public class Scrabble {
             if (currentChar == '{' && i < word.length() - 2) {
                 int closingBracketIndex = word.indexOf('}', i + 1);
 
+                if (closingBracketIndex - i == 3) {
+                    return 0;
+                }
                 if (closingBracketIndex != -1) {
                     // Found closing bracket
                     String enclosedWord = word.substring(i + 1, closingBracketIndex);
@@ -71,5 +74,5 @@ public class Scrabble {
             case 'Q', 'Z' -> 10;
             default -> 0;
         };
-        }
     }
+}
