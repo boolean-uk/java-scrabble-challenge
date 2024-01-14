@@ -1,197 +1,130 @@
 package com.booleanuk;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Scrabble {
-
-    public String word;
-    public int score = 0;
-
-
-    public boolean noWord(String word) {
-        return false;
-    }
-
-    public void noWordScore() {
-    }
-
-
+    public HashMap<Character, Integer> alphabet = new HashMap<>();
+    String word;
     public Scrabble(String word) {
-
-        this.word = word;
+        this.word = word.toUpperCase();
+        makeMap();
+    }
+    private void makeMap() {
+        this.alphabet.put('A', 1);
+        this.alphabet.put('E', 1);
+        this.alphabet.put('I', 1);
+        this.alphabet.put('O', 1);
+        this.alphabet.put('U', 1);
+        this.alphabet.put('L', 1);
+        this.alphabet.put('N', 1);
+        this.alphabet.put('R', 1);
+        this.alphabet.put('S', 1);
+        this.alphabet.put('T', 1);
+        this.alphabet.put('D', 2);
+        this.alphabet.put('G', 2);
+        this.alphabet.put('B', 3);
+        this.alphabet.put('C', 3);
+        this.alphabet.put('M', 3);
+        this.alphabet.put('F', 4);
+        this.alphabet.put('H', 4);
+        this.alphabet.put('V', 4);
+        this.alphabet.put('W', 4);
+        this.alphabet.put('Y', 4);
+        this.alphabet.put('K', 5);
+        this.alphabet.put('J', 8);
+        this.alphabet.put('X', 8);
+        this.alphabet.put('Q', 10);
+        this.alphabet.put('Z', 10);
 
     }
 
-    private int maybeMultiply(String word) {
 
-        if (word.startsWith("{") && word.endsWith("}")) {
-            return 3;
+
+
+    public int brackets() {
+
+        int value = 0;
+
+        if (this.word.contains("[") && !this.word.contains("]")) {
+            return value;
         }
-        if (word.startsWith("[") && word.endsWith("]")) {
-            return 2;
+
+        if (this.word.contains("{") && !this.word.contains("}")) {
+            return value;
         }
-        return 1;
-
+        if (this.word.contains("}") && this.word.contains("{") && (this.word.indexOf("}") < this.word.indexOf("{"))) {
+            return value;
+        }
+        if (this.word.contains("]") && this.word.contains("[") && (this.word.indexOf("]") < this.word.indexOf("["))) {
+            return value;
+        }
+        if (this.word.startsWith("{") && !this.word.endsWith("}") && this.word.charAt(2) != '}') {
+            return value;
+        }
+        return 0;
     }
-
-    private boolean isTriple(String word) {
-        return word.startsWith("{") && word.endsWith("}");
-    }
-
-
-    private boolean isDouble(String word) {
-        return word.startsWith("[") && word.endsWith("]");
-    }
-
 
     public int score() {
-
-        if (containsInvalidChars(word)) {
-            return 0;
-        }
-        String wordTemp = this.word;
-
-        if (noWord(wordTemp)) {
+        int value = 0;
+        if (this.word.contains("!") || this.word.contains("|")) {
             return 0;
         }
 
 
+        brackets();
 
-        char[] chars = word.toLowerCase().toCharArray();
-        int counter = 1;
+        if (this.word.contains("]") && !this.word.contains("[")) {
+            return value;
+        }
 
-        ArrayList<Character> parens = new ArrayList<>();
-        for (int i = 0; i < chars.length; i++) {
-            char aChar = chars[i];
-            if (startsMultplier(aChar)){
-                parens.add(aChar);
-            }
+        if (this.word.contains("}") && !this.word.contains("{")) {
+            return value;
+        }
 
-            if (aChar == '}' && parens.isEmpty()){
+
+        if (this.word.startsWith("[") && !this.word.endsWith("]") && this.word.charAt(2) != ']') {
+            return value;
+        }
+
+
+        for (int i = 0; i < this.word.length(); i++) {
+            char c = this.word.charAt(i);
+
+
+            if (c == '{' && this.word.charAt(i + 2) != '}' && !this.word.endsWith("}")) {
                 return 0;
             }
 
-            if (aChar == ']' && parens.isEmpty()){
-                return 0;
-            }
-
-            if ((aChar == '}') && parens.get(parens.size()-1) == '{'){
-                parens.remove(parens.size()-1);
-            }
-
-            if ((aChar == ']') && parens.get(parens.size()-1) == '['){
-                parens.remove(parens.size()-1);
-            }
-
-        }
-
-        if (!parens.isEmpty()){
-            return 0;
-        }
-
-        int letterMultiplier = 1;
-
-        int wordMultiplier = 1;
-        int totalScore = 0;
-
-
-        for (int n = 0; n < chars.length; n++) {
-            char aChar = chars[n];
-
-
-            if (startsMultplier(aChar)) {
-                if (wordMultiplier == 1 && startsMultplier(chars[n + 1])) {
-                    wordMultiplier = aChar == '[' ? 3 : 2;
-
-                    continue;
+            if (this.alphabet.containsKey(c)) {
+                int multi = 1;
+                if (i != 0 && i != this.word.length() - 1) {
+                    if (this.word.charAt(i - 1) == '{' && this.word.charAt(i + 1) == '}') {
+                        multi = 2;
+                    }
+                    if (this.word.charAt(i - 1) == '[' && this.word.charAt(i + 1) == ']') {
+                        multi = 3;
+                    }
                 }
-
-                letterMultiplier = aChar == '[' ? 3 : 2;
-                continue;
+                value += (this.alphabet.get(c) * multi);
             }
-
-            if (aChar == '}' || aChar == ']') {
-                continue;
-            }
-
-
-            if (aChar == 'a'
-                    || aChar == 'e'
-                    || aChar == 'i'
-                    || aChar == 'u'
-                    || aChar == 'l'
-                    || aChar == 'n'
-                    || aChar == 'r'
-                    || aChar == 's'
-                    || aChar == 't'
-                    || aChar == 'o') {
-                totalScore += letterMultiplier;
-                continue;
-            }
-
-            if (aChar == 'd' || aChar == 'g') {
-                totalScore += 2 * letterMultiplier;
-                continue;
-            }
-            if (aChar == 'b'
-                    || aChar == 'c'
-                    || aChar == 'm'
-                    || aChar == 'p'
-
-
-            ) {
-                totalScore += 3 * letterMultiplier;
-                continue;
-            }
-
-            if (aChar == 'f'
-                    || aChar == 'h'
-                    || aChar == 'v'
-                    || aChar == 'w'
-                    || aChar == 'y'
-            ) {
-                totalScore += 4 * letterMultiplier;
-                continue;
-            }
-
-            if (aChar == 'k') {
-                totalScore += 5 * letterMultiplier;
-                continue;
-            }
-            if (aChar == 'j' || aChar == 'x') {
-                totalScore += 8 * letterMultiplier;
-                continue;
-            }
-            if (aChar == 'q' || aChar == 'z') {
-                totalScore += 10 * letterMultiplier;
-
-
-            }
-
-
         }
 
 
-        return totalScore * wordMultiplier;
-    }
-
-    private boolean containsInvalidChars(String word) {
-        return word.contains("!") || word.contains("|");
-    }
-
-    private static boolean startsMultplier(char aChar) {
-        return aChar == '[' || aChar == '{';
-    }
-
-    private String removeWordMultipliers(String wordTemp) {
-        return wordTemp.substring(1, wordTemp.length() - 1);
-    }
+        if (this.word.startsWith("{") && this.word.endsWith("}") && this.word.charAt(2) != '}') {
+            if (this.word.charAt(1) == '[' && this.word.charAt(this.word.length() - 2) == ']') {
+                value *= 3;
+            }
+            value *= 2;
+        }
+        if (this.word.startsWith("[") && this.word.endsWith("]") && this.word.charAt(2) != ']') {
+            if (this.word.charAt(1) == '{' && this.word.charAt(this.word.length() - 2) == '}') {
+                value *= 2;
+            }
+            value *= 3;
+        }
 
 
-    public static void main(String[] args) {
-        Scrabble sc = new Scrabble("d[o]g");
-
-        System.out.println(sc.score());
+        return value;
     }
 
 }
