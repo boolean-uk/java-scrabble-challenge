@@ -52,62 +52,43 @@ public class Scrabble {
         this.word = this.word.replaceAll("\\p{C}", "");
         char[] arrayLetters = this.word.toCharArray();
 
-
-        if(this.word.isEmpty()) {
+        if (this.word.isEmpty()) {
             return 0;
         }
-        for(char arrayLetter : arrayLetters) {
+
+        Stack<Character> order = new Stack<>();
+
+        for (char arrayLetter : arrayLetters) {
             if(!letters.containsKey(arrayLetter)) {
                 return 0;
             }
+            if (arrayLetter == '{' || arrayLetter == '[') {
+                order.push(arrayLetter);
+                this.multiplier *= (arrayLetter == '{') ? 2 : 3;
+            } else if (arrayLetter == '}' || arrayLetter == ']') {
+                if (order.isEmpty() || (arrayLetter == '}' && order.pop() != '{') || (arrayLetter == ']' && order.pop() != '[')) {
+                    return 0;
+                }
+                this.multiplier /= (arrayLetter == '}') ? 2 : 3;
+            } else {
+                if (!order.isEmpty()) {
+                    score += letters.get(arrayLetter) * multiplier;
+                } else {
+                    score += letters.get(arrayLetter);
+                }
+            }
         }
-        Stack<Character> order = new Stack<>();
-        boolean isDoubled = false;
-        boolean isTripled = false;
-        for (int i = 0; i < arrayLetters.length; i++) {
-                if(arrayLetters[i] == '[') {
-                    this.multiplier = this.multiplier * 3;
-                    isTripled = true;
-                }
-                if(arrayLetters[i] == '{') {
-                    this.multiplier = this.multiplier * 2;
-                    isDoubled = true;
-                }
-                if(arrayLetters[i] == ']') {
-                    this.multiplier = this.multiplier / 3;
-                        if(!isTripled) {
-                            return 0;
-                        }
-                    isTripled = false;
-                }
-                if(arrayLetters[i] == '}') {
-                    this.multiplier = this.multiplier / 2;
-                    if(!isDoubled) {
-                        return 0;
-                    }
-                    isDoubled = false;
-                }
 
-                score += letters.get(arrayLetters[i]) * multiplier;
-            }
-            if(isDoubled || isTripled) {
-                return 0;
-            }
-        System.out.println("Stacken ser slik ut" + order);
-            return score;
+        // Check if all opened brackets are closed
+        if (!order.isEmpty()) {
+            return 0;
+        }
 
-    }
-
-    private int tripleMultiplier() {
-        return multiplier = multiplier * 3;
-    }
-
-    public int doubleMultiplier() {
-        return multiplier = multiplier * 2;
+        return score * multiplier;
     }
 
     public static void main(String[] args) {
-        Scrabble s = new Scrabble("d[o]g");
+        Scrabble s = new Scrabble("{h[e]llo}");
         System.out.println(s.score());
         System.out.println(s.word);
     }
