@@ -9,6 +9,8 @@ public class Scrabble {
         this.word = word.toUpperCase();
         makeMap();
     }
+
+
     private void makeMap() {
         this.alphabet.put('A', 1);
         this.alphabet.put('E', 1);
