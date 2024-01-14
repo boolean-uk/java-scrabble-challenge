@@ -44,8 +44,45 @@ public class Scrabble {
         int addScore = 0;
         char[] checkWord = upperCase.toCharArray();
 
+        if (checkCurlyBrackest(checkWord) && checkSquareBrackest(checkWord)){
+            /*
+            for (int i = 0; i < checkWord.length; i++){
+                int charScore = 0;
+                char character = checkWord[i];
 
-        if (checkCurlyBrackest(checkWord)) {
+                if (character == '{' && checkWord[i + 2] == '}') {
+                    charScore = letterValue.get(checkWord[i + 1]);
+                    addScore += (charScore * doublePoints);
+                    i += 2;
+                }
+                else if (character == '[' && checkWord[i + 2] == ']') {
+                    charScore = letterValue.get(checkWord[i + 1]);
+                    addScore += charScore * triplePoints;
+                    i += 2;
+                }
+                else if (doubleTotal(checkWord)) {
+                    addScore *= doublePoints;
+                }else if (tripleTotal(checkWord)) {
+                    addScore *= triplePoints;
+                }
+
+                else {
+                    charScore = letterValue.get(character);
+                    addScore += charScore;
+                }
+
+
+                if (doubleTotal(checkWord) && tripleTotal(checkWord)){
+                    addScore *= doublePoints;
+                    addScore *= triplePoints;
+                }
+            }
+
+             */
+
+        }
+
+        else if (checkCurlyBrackest(checkWord)) {
             for (int i = 0; i < checkWord.length; i++) {
                 int charScore = 0;
                 char character = checkWord[i];
@@ -57,7 +94,7 @@ public class Scrabble {
                     addScore += letterValue.get(character);
                 } else if (doubleTotal(checkWord)) {
                     addScore *= doublePoints;
-                } else if (!letterValue.containsValue(charScore)) {
+                } else if (!checkSquareBrackest(checkWord)) {
                     return 0;
                 } else {
                     return addScore;
@@ -75,7 +112,7 @@ public class Scrabble {
                     addScore += letterValue.get(character);
                 } else if (tripleTotal(checkWord)) {
                     addScore *= triplePoints;
-                } else if (!letterValue.containsValue(charScore)) {
+                } else if ( !letterValue.containsValue(character)) {
                     return 0;
                 } else {
                     return addScore;
@@ -84,25 +121,21 @@ public class Scrabble {
 
             }
         }
-        else{
-            for (int i = 0; i < checkWord.length; i++) {
-                char character = checkWord[i];
-                if (letterValue.containsKey(character)) {
-                    addScore += letterValue.get(character);
 
+        else if (!checkCurlyBrackest(checkWord) || !checkSquareBrackest(checkWord)) {
+            for (int i = 0; i < checkWord.length; i++) {
+                int charScore = 0;
+                char character = checkWord[i];
+                if (character == ' ' || character == '{' || character == '}' || character == '['
+                        || character == ']' || character == '\n' || character=='!' || character== '|') {
+                    return charScore;
                 } else {
-                    addScore = 0;
+                    charScore = letterValue.get(character);
+                    addScore += charScore;
                 }
             }
-
         }
 
-        /*  Destroy's the core tests, but allowes some tests in the extension to pass through
-        if (!checkCurlyBrackest(checkWord) || !checkSquareBrackest(checkWord)) {
-            return addScore;
-        }
-
-         */
 
         return addScore;
     }
@@ -149,23 +182,22 @@ public class Scrabble {
     }
     public boolean doubleTotal(char [] checkDoubles){
 
-        for (int i = 0; i < checkDoubles.length; i++){
-            if (checkDoubles[0] == '{' && checkDoubles[checkDoubles.length -1]== '}'){
-                return true;
-            }
+        if (checkDoubles[0] == '{' && checkDoubles[checkDoubles.length -1]== '}'
+                || checkDoubles[1] == '{' && checkDoubles[checkDoubles.length -2]== '}'){
+            return true;
         }
+
         return false;
 
     }
     public boolean tripleTotal(char [] checkDoubles){
 
-        for (int i = 0; i < checkDoubles.length; i++){
-            if (checkDoubles[0] == '[' && checkDoubles[checkDoubles.length -1]== ']'){
-                return true;
-            }
+        if (checkDoubles[0] == '[' && checkDoubles[checkDoubles.length -1]== ']'
+            || checkDoubles[1] == '[' && checkDoubles[checkDoubles.length -2]== ']'){
+            return true;
         }
-        return false;
 
+        return false;
     }
 
 }
