@@ -45,7 +45,7 @@ public class Scrabble {
         char[] checkWord = upperCase.toCharArray();
 
         if (checkCurlyBrackest(checkWord) && checkSquareBrackest(checkWord)){
-            /*
+
             for (int i = 0; i < checkWord.length; i++){
                 int charScore = 0;
                 char character = checkWord[i];
@@ -59,11 +59,15 @@ public class Scrabble {
                     charScore = letterValue.get(checkWord[i + 1]);
                     addScore += charScore * triplePoints;
                     i += 2;
-                }
+                } /*
                 else if (doubleTotal(checkWord)) {
                     addScore *= doublePoints;
                 }else if (tripleTotal(checkWord)) {
                     addScore *= triplePoints;
+                }
+                */
+                else if (!letterValue.containsKey(character)){
+                    return 0;
                 }
 
                 else {
@@ -71,15 +75,7 @@ public class Scrabble {
                     addScore += charScore;
                 }
 
-
-                if (doubleTotal(checkWord) && tripleTotal(checkWord)){
-                    addScore *= doublePoints;
-                    addScore *= triplePoints;
-                }
             }
-
-             */
-
         }
 
         else if (checkCurlyBrackest(checkWord)) {
@@ -94,7 +90,7 @@ public class Scrabble {
                     addScore += letterValue.get(character);
                 } else if (doubleTotal(checkWord)) {
                     addScore *= doublePoints;
-                } else if (!checkSquareBrackest(checkWord)) {
+                } else if (!letterValue.containsKey(character)) {
                     return 0;
                 } else {
                     return addScore;
@@ -112,12 +108,11 @@ public class Scrabble {
                     addScore += letterValue.get(character);
                 } else if (tripleTotal(checkWord)) {
                     addScore *= triplePoints;
-                } else if ( !letterValue.containsValue(character)) {
+                } else if (!letterValue.containsKey(character)) {
                     return 0;
                 } else {
                     return addScore;
                 }
-
 
             }
         }
@@ -126,8 +121,7 @@ public class Scrabble {
             for (int i = 0; i < checkWord.length; i++) {
                 int charScore = 0;
                 char character = checkWord[i];
-                if (character == ' ' || character == '{' || character == '}' || character == '['
-                        || character == ']' || character == '\n' || character=='!' || character== '|') {
+                if (!letterValue.containsKey(character)) {
                     return charScore;
                 } else {
                     charScore = letterValue.get(character);
@@ -135,7 +129,6 @@ public class Scrabble {
                 }
             }
         }
-
 
         return addScore;
     }
