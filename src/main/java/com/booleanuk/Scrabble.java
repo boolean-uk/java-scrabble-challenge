@@ -15,29 +15,20 @@ public class Scrabble {
         for (int i = 0; i < word.length(); i++) {
             char currentChar = word.toUpperCase().charAt(i);
 
-            if (currentChar == '{' && i < word.length() - 2) {
-                int closingBracketIndex = word.indexOf('}', i + 1);
+            if (currentChar == '{' || currentChar == '[') {
+                int closingBracketIndex = findClosingBracketIndex(i, currentChar);
 
                 if (closingBracketIndex - i == 3) {
                     return 0;
                 }
                 if (closingBracketIndex != -1) {
-                    // Found closing bracket
                     String enclosedWord = word.substring(i + 1, closingBracketIndex);
-                    letterMultiplier = 2;
-                    totalScore += getWordValue(enclosedWord) * letterMultiplier;
-                    i = closingBracketIndex; // Skip the enclosed word
-                } else {
-                    return 0; // Invalid multiplier, return 0
-                }
-            } else if (currentChar == '[' && i < word.length() - 2) {
-                int closingBracketIndex = word.indexOf(']', i + 1);
-
-                if (closingBracketIndex != -1) {
-                    // Found closing bracket
-                    String enclosedWord = word.substring(i + 1, closingBracketIndex);
-                    letterMultiplier = 3;
-                    totalScore += getWordValue(enclosedWord) * letterMultiplier;
+                    if (currentChar == '{') {
+                        letterMultiplier = 2;
+                    } else {
+                        letterMultiplier = 3;
+                    }
+                    totalScore += scoreEnclosedWord(enclosedWord) * letterMultiplier;
                     i = closingBracketIndex; // Skip the enclosed word
                 } else {
                     return 0; // Invalid multiplier, return 0
@@ -52,15 +43,30 @@ public class Scrabble {
         return totalScore;
     }
 
-    // Function to get the value of an entire word
-    private int getWordValue(String word) {
-        int wordValue = 0;
+    private int findClosingBracketIndex(int startIndex, char openingBracket) {
+        char closingBracket = (openingBracket == '{') ? '}' : ']';
+        int depth = 0;
 
-        for (int i = 0; i < word.length(); i++) {
-            wordValue += getLetterValue(word.toUpperCase().charAt(i));
+        for (int i = startIndex + 1; i < word.length(); i++) {
+            char currentChar = word.charAt(i);
+
+            if (currentChar == openingBracket) {
+                depth++;
+            } else if (currentChar == closingBracket) {
+                if (depth == 0) {
+                    return i;
+                } else {
+                    depth--;
+                }
+            }
         }
 
-        return wordValue;
+        return -1; // Closing bracket not found
+    }
+
+    private int scoreEnclosedWord(String enclosedWord) {
+        Scrabble enclosedScrabble = new Scrabble(enclosedWord);
+        return enclosedScrabble.score();
     }
 
     private int getLetterValue(char letter) {
