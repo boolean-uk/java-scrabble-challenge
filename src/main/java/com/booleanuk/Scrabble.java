@@ -59,7 +59,6 @@ public class Scrabble {
         values.put("Q", 10);
         values.put("Z", 10);
 
-
         // Core
         int sum = 0;
         for(int i = 0; i < word.length(); i++){
