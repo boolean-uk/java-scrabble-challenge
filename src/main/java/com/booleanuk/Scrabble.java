@@ -2,12 +2,12 @@ package com.booleanuk;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 public class Scrabble {
     String word ="";
     public Scrabble(String word) {
-        this.word = word;
-
+        this.word = word.toUpperCase();
     }
     public HashMap<String, Integer> createMap(){
         HashMap<String,Integer> map = new HashMap<>();
@@ -37,24 +37,65 @@ public class Scrabble {
         map.put("X",8);
         map.put("Q",10);
         map.put("Z",10);
-        return map;
 
+        return map;
     }
 
     public int score() {
-        int sum = 0;
         HashMap<String, Integer> theMap = createMap();
-        for (int i = 0; i < word.length(); i++) {
+        int sum = 0;
+        int multiplier = 1;
+
+        if ((word.contains("|") || word.contains("!"))) {
+            return 0;
+        }
+        if(!isValid()){
+            return 0;
+        }
+
+        for (int i=0;i<word.length();i++) {
             char currentChar = word.charAt(i);
-            String charKey = String.valueOf(currentChar).toUpperCase();
-            if (theMap.containsKey(charKey)) {
-                sum += theMap.get(charKey) ;
+            String charKey = String.valueOf(currentChar);
+            if (word.contains("{" + currentChar + currentChar + "}")){
+                return 0;
+            }
+            else if (currentChar == '{') {
+                multiplier *= 2;
+            } else if (currentChar == '}') {
+                multiplier /= 2;
+            } else if (currentChar == '[') {
+                multiplier *= 3;
+            } else if (currentChar == ']') {
+                multiplier /= 3;
+            } else if (theMap.containsKey(charKey)) {
+                sum += theMap.get(charKey) * multiplier;
             }
         }
-        return sum ;
+        return sum;
     }
 
+    public boolean isValid() {
+        Stack<Character> stack = new Stack<>();
+        for (int i =0; i<word.length(); i++) {
+            char currentChar = word.charAt(i);
+            if (currentChar == '{' || currentChar == '[') {
+                stack.push(currentChar);
+            } else if (currentChar == '}' || currentChar == ']') {
+                if (stack.isEmpty()) {
+                    return false;
+                }
+                else if ((currentChar == '}' && stack.pop() != '{') || (currentChar == ']' && stack.pop() != '[')) {
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
 
+    }
+    public static void main (String[] arg){
+        Scrabble o = new Scrabble("d[o]g");
+        System.out.println(o.score());
 
+    }
 
 }
