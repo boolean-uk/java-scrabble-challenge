@@ -19,28 +19,52 @@ public class Scrabble {
     public int addScore(int score, char letter){
         int currentScore=score;
         int scoreToAdd=0;
-        if (onePoint.contains(String.valueOf(letter))) scoreToAdd +=1;
-        else if (twoPoint.contains(String.valueOf(letter))) scoreToAdd +=2;
-        else if (threePoint.contains(String.valueOf(letter))) scoreToAdd +=3;
-        else if (fourPoint.contains(String.valueOf(letter))) scoreToAdd +=4;
-        else if (fivePoint.contains(String.valueOf(letter))) scoreToAdd +=5;
-        else if (eightPoint.contains(String.valueOf(letter))) scoreToAdd +=8;
-        else if (tenPoint.contains(String.valueOf(letter))) scoreToAdd +=10;
-        else if (letter == '{' || letter == '}' || letter == '[' || letter == ']' ) scoreToAdd+=0;
+        if (onePoint.contains(String.valueOf(letter))) {
+            scoreToAdd +=1;
+        }
+        else if (twoPoint.contains(String.valueOf(letter))) {
+            scoreToAdd +=2;
+        }
+        else if (threePoint.contains(String.valueOf(letter))) {
+            scoreToAdd +=3;
+        }
+        else if (fourPoint.contains(String.valueOf(letter))) {
+            scoreToAdd +=4;
+        }
+        else if (fivePoint.contains(String.valueOf(letter))) {
+            scoreToAdd +=5;
+        }
+        else if (eightPoint.contains(String.valueOf(letter))) {
+            scoreToAdd +=8;
+        }
+        else if (tenPoint.contains(String.valueOf(letter))) {
+            scoreToAdd +=10;
+        }
+        else if (letter == '{' || letter == '}' || letter == '[' || letter == ']' ) {
+            scoreToAdd+=0;
+        }
 
         else return currentScore=-1;
         return scoreToAdd;
     }
     public int checkDouble(char letter,char letter2, int i){
-        if (word.length()<3)return 1;
-        if (letter=='{' & letter2=='}') return 2;
-        if (letter=='[' & letter2==']') return 3;
+        if (word.length()<3){
+            return 1;
+        }
+        if (letter=='{' & letter2=='}') {
+            return 2;
+        }
+        if (letter=='[' & letter2==']') {
+            return 3;
+        }
         else return 1;
 
     }
     public int checkDoubleValid(String word){
         String check= word;
-        if (word.length()<3)return 1;
+        if (word.length()<3){
+            return 1;
+        }
 
 
         if (check.charAt(0)=='{' & (check.charAt(check.length()-1))=='}' ||
@@ -50,27 +74,47 @@ public class Scrabble {
                 check.charAt(0)=='{' & (check.charAt(2))=='}'||
                 check.charAt(1)=='{' & (check.charAt(3))=='}'||
                 check.charAt(0)=='[' & (check.charAt(2))==']'||
-                check.charAt(1)=='[' & (check.charAt(3))==']') return 1;
+                check.charAt(1)=='[' & (check.charAt(3))==']') {
+            return 1;
+        }
         else return -1;
 
 
 
     }
     public int checkWordMultiplierTwo(char letter, char letter2, String word){
-        if (word.length()<3)return 1;
+        if (word.length()<3){
+            return 1;
+        }
         if (word.charAt(0)=='{' & word.charAt(2)=='}' || word.charAt(0)=='[' & word.charAt(2)==']'
-        ) return 1;
-        if (letter=='{' & letter2=='}') return 2;
-        if (letter=='[' & letter2==']') return 3;
+        ) {
+            return 1;
+        }
+        if (letter=='{' & letter2=='}') {
+            return 2;
+        }
+        if (letter=='[' & letter2==']') {
+            return 3;
+        }
         else return 1;
     }
     public int checkWordMultiplierThree(char letter, char letter2, String word){
-        if (word.length()<3)return 1;
+        if (word.length()<3){
+            return 1;
+        }
         if (word.charAt(0)=='{' & word.charAt(2)=='}' || word.charAt(0)=='[' & word.charAt(2)==']'
-        ) return 1;
-        if (letter=='{' & letter2=='}') return 2;
-        if (letter=='[' & letter2==']') return 3;
-        else return 1;
+        ) {
+            return 1;
+        }
+        if (letter=='{' & letter2=='}') {
+            return 2;
+        }
+        if (letter=='[' & letter2==']') {
+            return 3;
+        }
+        else {
+            return 1;
+        }
     }
 
 
@@ -103,7 +147,9 @@ public class Scrabble {
             multiplier=1;
         }
         wordMultiplierTwo=checkWordMultiplierTwo(word.charAt(0),word.charAt(word.length()-1),word);
-        if (word.length()>5) wordMultiplierThree=checkWordMultiplierThree(word.charAt(1),word.charAt(word.length()-2),word);
+        if (word.length()>5) {
+            wordMultiplierThree=checkWordMultiplierThree(word.charAt(1),word.charAt(word.length()-2),word);
+        }
 
         return score*wordMultiplierTwo*wordMultiplierThree;
     }
