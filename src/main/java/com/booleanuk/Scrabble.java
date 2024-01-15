@@ -28,6 +28,7 @@ public class Scrabble {
         boolean letterBonus = false;
         int finalScore = 0, bonusLetter = 1, bonusWord = 1;
         char currentLetter = ' ';
+        if(word.isEmpty()) return 0;
 
         // Checks if word has only valid characters
         Pattern validChars = Pattern.compile("(^([a-zA-Z]+)|(\\{)|(})|(\\[)|(])$)");
@@ -35,7 +36,7 @@ public class Scrabble {
         boolean match = m.find();
         if(!match)
             return 0;   // Returns 0 if illegal characters found
-        if(word.isEmpty()) return 0;
+
 
         for(int i = 0; i < word.length(); i++)
         {
@@ -107,7 +108,8 @@ public class Scrabble {
 
     public void wordBonus()
     {
-        if(word.charAt(0) == '{' && word.charAt(word.length()-1) == '}' && getBonus(0) == 1)
+        if(word.isEmpty()) bonusWord = 0;
+        else if(word.charAt(0) == '{' && word.charAt(word.length()-1) == '}' && getBonus(0) == 1)
             bonusWord += 2;
         else if(word.charAt(0) == '[' && word.charAt(word.length()-1) == ']' && getBonus(0) == 1)
             bonusWord += 3;
