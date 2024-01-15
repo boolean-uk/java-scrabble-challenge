@@ -49,54 +49,70 @@ public class Scrabble {
             for (int i = 0; i < checkWord.length; i++){
                 int charScore = 0;
                 char character = checkWord[i];
-
+                //Checks if there are letters with double points
                 if (character == '{' && checkWord[i + 2] == '}') {
                     charScore = letterValue.get(checkWord[i + 1]);
                     addScore += (charScore * doublePoints);
                     i += 2;
                 }
+                //Checks if there are letters with triple points
                 else if (character == '[' && checkWord[i + 2] == ']') {
                     charScore = letterValue.get(checkWord[i + 1]);
                     addScore += charScore * triplePoints;
                     i += 2;
-                } /*
-                else if (doubleTotal(checkWord)) {
-                    addScore *= doublePoints;
-                }else if (tripleTotal(checkWord)) {
-                    addScore *= triplePoints;
                 }
-                */
-                else if (!letterValue.containsKey(character)){
-                    return 0;
-                }
-
-                else {
+                //Gives normal letters normal value
+                else if (letterValue.containsKey(character)) {
                     charScore = letterValue.get(character);
                     addScore += charScore;
                 }
 
             }
+            //If the words get's double/triple points or both.
+            if (doubleTotal(checkWord)){
+                addScore*= doublePoints;
+                if (tripleTotal(checkWord)){
+                    addScore*= triplePoints;
+                }
+            } else if (tripleTotal(checkWord)) {
+                addScore*= triplePoints;
+                if (doubleTotal(checkWord)){
+                    addScore*= doublePoints;
+                }
+                //If there are false positives
+            } else if (checkWord[0] == '{' && checkWord[checkWord.length-1] == ']'){
+                return 0;
+            }
         }
-
+        //Checks if there are only curly brackets
         else if (checkCurlyBrackest(checkWord)) {
             for (int i = 0; i < checkWord.length; i++) {
                 int charScore = 0;
                 char character = checkWord[i];
+                //Checks which letters has double points
                 if (character == '{' && checkWord[i + 2] == '}') {
                     charScore = letterValue.get(checkWord[i + 1]);
                     addScore += (charScore * doublePoints);
                     i += 2;
-                } else if (letterValue.containsKey(character)) {
+                }
+                //Other letters get normal points
+                else if (letterValue.containsKey(character)) {
                     addScore += letterValue.get(character);
-                } else if (doubleTotal(checkWord)) {
+                }
+                //Doubles the word-score if needed
+                else if (doubleTotal(checkWord)) {
                     addScore *= doublePoints;
-                } else if (!letterValue.containsKey(character)) {
+                }
+                //If there are false positives in the check
+                else if (!letterValue.containsKey(character)) {
                     return 0;
                 } else {
                     return addScore;
                 }
             }
-        } else if (checkSquareBrackest(checkWord)) {
+        }
+
+        else if (checkSquareBrackest(checkWord)) {
             for (int i = 0; i < checkWord.length; i++) {
                 int charScore = 0;
                 char character = checkWord[i];
@@ -174,22 +190,18 @@ public class Scrabble {
 
     }
     public boolean doubleTotal(char [] checkDoubles){
-
         if (checkDoubles[0] == '{' && checkDoubles[checkDoubles.length -1]== '}'
                 || checkDoubles[1] == '{' && checkDoubles[checkDoubles.length -2]== '}'){
             return true;
         }
-
         return false;
 
     }
     public boolean tripleTotal(char [] checkDoubles){
-
         if (checkDoubles[0] == '[' && checkDoubles[checkDoubles.length -1]== ']'
             || checkDoubles[1] == '[' && checkDoubles[checkDoubles.length -2]== ']'){
             return true;
         }
-
         return false;
     }
 
