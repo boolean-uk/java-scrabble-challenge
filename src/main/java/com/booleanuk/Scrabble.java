@@ -35,6 +35,7 @@ public class Scrabble {
         boolean match = m.find();
         if(!match)
             return 0;   // Returns 0 if illegal characters found
+        if(word.isEmpty()) return 0;
 
         for(int i = 0; i < word.length(); i++)
         {
