@@ -111,7 +111,7 @@ public class Scrabble {
                 }
             }
         }
-
+        //Same as the last except with triple points
         else if (checkSquareBrackest(checkWord)) {
             for (int i = 0; i < checkWord.length; i++) {
                 int charScore = 0;
@@ -132,7 +132,7 @@ public class Scrabble {
 
             }
         }
-
+        //If there are no extra points
         else if (!checkCurlyBrackest(checkWord) || !checkSquareBrackest(checkWord)) {
             for (int i = 0; i < checkWord.length; i++) {
                 int charScore = 0;
@@ -152,6 +152,8 @@ public class Scrabble {
     public boolean checkCurlyBrackest(char [] checkBracket){
         int amountOpen = 0;
         int amountClosed = 0;
+        //Checks if there are brackets in the word given,
+        // and counts them in case of false positives or no brackets
         for(int i = 0; i < checkBracket.length; i++){
             char chacracter = checkBracket[i];
             if (chacracter == '{'){
@@ -167,12 +169,12 @@ public class Scrabble {
             }
         }
         return false;
-
     }
 
     public boolean checkSquareBrackest(char [] checkBracket){
         int amountOpen = 0;
         int amountClosed = 0;
+        //Same as the last method except with square brackets
         for(int i = 0; i < checkBracket.length; i++){
             char chacracter = checkBracket[i];
             if (chacracter == '['){
@@ -189,7 +191,9 @@ public class Scrabble {
         }return false;
 
     }
+
     public boolean doubleTotal(char [] checkDoubles){
+        //Checks if the word is worth double
         if (checkDoubles[0] == '{' && checkDoubles[checkDoubles.length -1]== '}'
                 || checkDoubles[1] == '{' && checkDoubles[checkDoubles.length -2]== '}'){
             return true;
@@ -198,6 +202,7 @@ public class Scrabble {
 
     }
     public boolean tripleTotal(char [] checkDoubles){
+        //Checks if the word is worth triple
         if (checkDoubles[0] == '[' && checkDoubles[checkDoubles.length -1]== ']'
             || checkDoubles[1] == '[' && checkDoubles[checkDoubles.length -2]== ']'){
             return true;
