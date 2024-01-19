@@ -26,13 +26,15 @@ public class Scrabble {
     }
 
     public int score() {
-        String pattern = ".*[a-zA-Z]*\\{[a-zA-Z]+\\}[a-zA-Z]*.*";
+        //solution to the problem with curly brackets specifically he{ll}o
+        String pattern = ".*\\{[a-zA-Z]{2}\\}.*";
         if (word.contains("!") || word.contains("|") || !isValidMultiplierFormat(word)) {
             return 0;
+        } else if (word.matches(pattern)) {
+            return 0;
         }
-//        } else if (word.matches(pattern)) {
-//            return 0;
-//        }
+
+        //an alternative way to find the words with curly brackets encapsuling two letters
         int teller = 0;
         for (int i = 0; i < word.length(); i++) {
             char ch = word.charAt(i);
