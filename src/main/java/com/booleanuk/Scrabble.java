@@ -1,76 +1,115 @@
 package com.booleanuk;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Scrabble {
-    private List<String> ones = Arrays.asList("A", "E", "I", "O", "U", "L", "N", "R", "S", "T");
-    private List<String> twos = Arrays.asList("D", "G");
-    private List<String> threes = Arrays.asList("B", "C", "M", "P");
-    private List<String> fours = Arrays.asList("F", "H", "V", "W", "Y");
-    private List<String> fives = Arrays.asList("K");
-    private List<String> eights = Arrays.asList("J", "X");
-    private List<String> tens = Arrays.asList("Q", "Z");
-    public HashMap<List<String>, Integer> scoreMap = new HashMap<>();
-    public String word;
-    public Scrabble(String word) {
-        this.word = word;
+    final private Map<Character, Integer> letterScores;
+    final private String word;
 
-        scoreMap.put(ones, 1);
-        scoreMap.put(twos, 2);
-        scoreMap.put(threes, 3);
-        scoreMap.put(fours, 4);
-        scoreMap.put(fives, 5);
-        scoreMap.put(eights, 8);
-        scoreMap.put(tens, 10);
+    List<Character> specialChars = Arrays.asList('{', '[', ']', '}');
+
+    boolean atLeastOneDoubleBonus = false;
+    boolean atLeastOneTripleBonus = false;
+
+    public Scrabble(String word){
+        letterScores = getLetterScores();
+        this.word = word.toLowerCase();
+    }
+
+    private Map<Character, Integer> getLetterScores(){
+        return new HashMap<>(){{
+            put('a', 1);
+            put('b', 3);
+            put('c', 3);
+            put('d', 2);
+            put('e', 1);
+            put('f', 4);
+            put('g', 2);
+            put('h', 4);
+            put('i', 1);
+            put('j', 8);
+            put('k', 5);
+            put('l', 1);
+            put('m', 3);
+            put('n', 1);
+            put('o', 1);
+            put('p', 3);
+            put('q', 10);
+            put('r', 1);
+            put('s', 1);
+            put('t', 1);
+            put('u', 1);
+            put('v', 4);
+            put('w', 4);
+            put('x', 8);
+            put('y', 4);
+            put('z', 10);
+        }};
     }
 
     public int score() {
-        int score = 0;
-        for (String c: word.split("")){
-            String character = c.toUpperCase();
-            for (List<String> charList: scoreMap.keySet()){
-                score += scoreCalc(character, charList);
+        for (char ch : word.toCharArray()){
+            if (!letterScores.containsKey(ch) && !specialChars.contains(ch)){
+                return 0;
             }
         }
-        if (checkBonusWord(word) != 1){
-            score = score*checkBonusWord(word);
-        }
-        return score;
-    }
 
-    private int scoreCalc(String character, List<String> charList){
-        if (charList.contains(character)){
-            return scoreMap.get(charList);
-        } else return 0;
-    }
+        int total = 0;
 
-    public void checkBonusLetter(String word){
-        /*
-        String doublePattern = "\{[a-z]?\}";
-        String triplePattern = "\[[a-z]?\]";
-        if (word.matches(doublePattern)){
-
-        } else if (word.matches(triplePattern)){
-
+        for (char ch : word.toCharArray()) {
+            if (this.letterScores.containsKey(ch)) {
+                int score = this.letterScores.get(ch);
+                total += score*checkBonusLetter(ch);
+            }
         }
 
-         */
+        if (checkBonusWord() != 1){
+            total = total*checkBonusWord();
+        }
+
+        return total;
     }
 
-    public int checkBonusWord(String word){
-        if (word.startsWith("[{") && word.endsWith("}]") ||
-                word.startsWith("{[") && word.endsWith("]}")){
+    public int checkBonusLetter(char letter){
+        char[] characters = word.toCharArray();
+        int index = word.indexOf(letter);
+
+        try {
+            if (characters[index - 1] == '{' && characters[index + 1] == '}'){
+                atLeastOneDoubleBonus = true;
+                return 2;
+            } else if (characters[index - 1] == '[' && characters[index + 1] == ']'){
+                atLeastOneTripleBonus = true;
+                return 3;
+            } else {
+                return 1;
+            }
+        } catch (IndexOutOfBoundsException e){
+                return 1;
+        }
+    }
+
+    public int checkBonusWord(){
+        List<String> asList = Arrays.asList(word.split(""));
+        int occurrences1 = Collections.frequency(asList, "{");
+        int occurrences2 = Collections.frequency(asList, "}");
+        int occurrences3 = Collections.frequency(asList, "[");
+        int occurrences4 = Collections.frequency(asList, "]");
+
+        if ((word.startsWith("[{") && word.endsWith("}]")) ||
+                (word.startsWith("{[") && word.endsWith("]}"))) {
             return 6;
-        }
-        if (word.startsWith("{") && word.endsWith("}")){
+        } else if (word.startsWith("{") && word.endsWith("}")){
             return 2;
-        }
-        if (word.startsWith("[") && word.endsWith("]")){
+        } else if (word.startsWith("[") && word.endsWith("]")){
             return 3;
+
+        } else if ((!atLeastOneDoubleBonus && !atLeastOneTripleBonus && word.contains())){
+            return 0;
+        } else if (occurrences1 != occurrences2 || occurrences3 != occurrences4) {
+            return 0;
         }
+
         return 1;
     }
 }
