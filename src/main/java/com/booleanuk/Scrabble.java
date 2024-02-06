@@ -15,7 +15,7 @@ public class Scrabble {
     private final String word;
 
 
-    String validChars = "^[\\{\\}\\[\\]abcdefghijklmnopqrstuvwxyz]+";
+    String validChars = "^[\\{\\}\\[\\]abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]+";
 
 
     final String doublePattern = "\\{[a-z+]\\}";
@@ -116,49 +116,49 @@ public class Scrabble {
 
     private int score(final String letter) {
 
-        if (letter.matches("[aeioulnrst]+")) {
+        if (letter.matches("[aeioulnrstAEIOULNRST]+")) {
 
             return 1;
 
         }
 
 
-        if (letter.matches("[dg]+")) {
+        if (letter.matches("[dgDG]+")) {
 
             return 2;
 
         }
 
 
-        if (letter.matches("[bcmp]+")) {
+        if (letter.matches("[bcmpBCMP]+")) {
 
             return 3;
 
         }
 
 
-        if (letter.matches("[fhvwy]+")) {
+        if (letter.matches("[fhvwyFHVWY]+")) {
 
             return 4;
 
         }
 
 
-        if (letter.matches("[k]+")) {
+        if (letter.matches("[kK]+")) {
 
             return 5;
 
         }
 
 
-        if (letter.matches("[jx]+")) {
+        if (letter.matches("[jxJX]+")) {
 
             return 8;
 
         }
 
 
-        if (letter.matches("qz")) {
+        if (letter.matches("[qz]+")) {
 
             return 10;
 
@@ -281,4 +281,3 @@ public class Scrabble {
     }
 
 }
-
