@@ -1,139 +1,121 @@
 package com.booleanuk;
 
-public class Scrabble {
-    String word;
-    int score;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
-    public Scrabble(String word) {
-        this.word = word.toUpperCase();
+public class Scrabble {
+
+    private String word;
+    private Map<Character, Integer> letters = new HashMap<>();
+
+    public void initialize() {
+        letters.put('A', 1);
+        letters.put('E', 1);
+        letters.put('I', 1);
+        letters.put('O', 1);
+        letters.put('U', 1);
+        letters.put('L', 1);
+        letters.put('N', 1);
+        letters.put('R', 1);
+        letters.put('S', 1);
+        letters.put('T', 1);
+        letters.put('D', 2);
+        letters.put('G', 2);
+        letters.put('B', 3);
+        letters.put('C', 3);
+        letters.put('M', 3);
+        letters.put('P', 3);
+        letters.put('F', 4);
+        letters.put('H', 4);
+        letters.put('V', 4);
+        letters.put('W', 4);
+        letters.put('Y', 4);
+        letters.put('K', 5);
+        letters.put('J', 8);
+        letters.put('X', 8);
+        letters.put('Q', 10);
+        letters.put('Z', 10);
     }
 
-    public int getLetterScore(char letter) {
-        switch (letter) {
-            case 'A':
-            case 'E':
-            case 'I':
-            case 'O':
-            case 'U':
-            case 'L':
-            case 'N':
-            case 'R':
-            case 'S':
-            case 'T':
-                return 1;
-            case 'D':
-            case 'G':
-                return 2;
-            case 'B':
-            case 'C':
-            case 'M':
-            case 'P':
-                return 3;
-            case 'F':
-            case 'H':
-            case 'V':
-            case 'W':
-            case 'Y':
-                return 4;
-            case 'K':
-                return 5;
-            case 'J':
-            case 'X':
-                return 8;
-            case 'Q':
-            case 'Z':
-                return 10;
-            default:
-                return 0;
-        }
+    public Scrabble(String word) {
+        this.word = word;
+        initialize();
     }
 
     public int score() {
-        score = 0;
-        boolean doubleLetter = false;
-        boolean tripleLetter = false;
-        boolean doubleWord = false;
-        boolean tripleWord = false;
+        String pattern = ".*\\{[a-zA-Z]{2}\\}.*";
 
-        for (int i = 0; i < word.length(); i++) {
-            char letter = word.charAt(i);
-
-            if (letter == '{' || letter == '[' || letter == '(' || letter == '<') {
-
-                int closingIndex = word.indexOf(getClosingBracket(letter), i + 1);
-                if (closingIndex != -1) {
-                    String multiplierContent = word.substring(i + 1, closingIndex);
-                    int multiplierScore = scoreMultiplierContent(multiplierContent);
-                }
-            }
-
-            if (letter == '{') {
-                doubleLetter = true;
-                continue;
-            } else if (letter == '}') {
-                doubleLetter = false;
-                continue;
-            } else if (letter == '[') {
-                tripleLetter = true;
-                continue;
-            } else if (letter == ']') {
-                tripleLetter = false;
-                continue;
-            } else if (letter == '(') {
-                doubleWord = true;
-                continue;
-            } else if (letter == ')') {
-                doubleWord = false;
-                continue;
-            } else if (letter == '<') {
-                tripleWord = true;
-                continue;
-            } else if (letter == '>') {
-                tripleWord = false;
-                continue;
-            }
-
-            int letterScore = getLetterScore(letter);
-
-            if (doubleLetter) {
-                letterScore *= 2;
-            } else if (tripleLetter) {
-                letterScore *= 3;
-            }
-
-            score += letterScore;
+        if (word.matches(pattern)) {
+            return 0;
+        }
+        else if (word.contains("!") || word.contains("|")) {
+            return 0;
+        }
+        else if (!isValid(word)) {
+            return 0;
         }
 
-        if (doubleWord) {
-            score *= 2;
-        } else if (tripleWord) {
-            score *= 3;
+        int count = 0;
+        for (int i = 0; i < word.length(); i++) {
+            char ch = word.charAt(i);
+            if (ch=='{' || ch=='}'){
+                count++;
+            }
+        }
+        if (count==2){
+            for (int i = 0; i < word.length(); i++) {
+                char ch = word.charAt(i);
+                if (!word.contains("[") || !word.contains("]")){
+                    if (ch =='{' && word.charAt(i+3)=='}') {
+                        return 0;
+                    }
+                }
+
+            }
+        }
+
+        String word2 = word.toUpperCase();
+        int score = 0;
+        int multiplier = 1;
+
+        for (int i = 0; i < word2.length(); i++) {
+            char currentChar = word2.charAt(i);
+
+            if (currentChar == '{') {
+                multiplier *= 2;
+            } else if (currentChar == '}') {
+                multiplier /= 2;
+            } else if (currentChar == '[') {
+                multiplier *= 3;
+            } else if (currentChar == ']') {
+                multiplier /= 3;
+            } else if (Character.isLetter(currentChar)) {
+                score += letters.getOrDefault(currentChar, 0) * multiplier;
+            }
         }
 
         return score;
     }
 
+    public boolean isValid(String word) {
+        Stack<Character> stack = new Stack<>();
 
-    public char getClosingBracket(char openingBracket) {
-        switch (openingBracket) {
-            case '{':
-                return '}';
-            case '[':
-                return ']';
-            case '(':
-                return ')';
-            case '<':
-                return '>';
-            default:
-                throw new IllegalArgumentException("Invalid opening bracket: " + openingBracket);
+        for (int i = 0; i < word.length(); i++) {
+            char ch = word.charAt(i);
+
+            if (ch == '{' || ch == '[') {
+                stack.push(ch);
+            } else if (ch == '}' || ch == ']') {
+                if (stack.isEmpty()) return false;
+                char opening = stack.pop();
+                if ((ch == '}' && opening != '{') || (ch == ']' && opening != '[')) {
+                    return false;
+                }
+            }
         }
-    }
 
-    public int scoreMultiplierContent(String content) {
-        Scrabble multiplierScrabble = new Scrabble(content);
-        return multiplierScrabble.score();
+        return stack.isEmpty();
     }
 
 }
-
-
