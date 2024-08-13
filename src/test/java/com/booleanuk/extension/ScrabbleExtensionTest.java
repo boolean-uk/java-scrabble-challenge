@@ -54,7 +54,6 @@ public class ScrabbleExtensionTest {
         Scrabble scrabble2 = new Scrabble("|d|og");
         Assertions.assertEquals(0, scrabble2.score());
     }
-
     @Test
     public void nestedLetterInsideWordMultipliers() {
         Scrabble scrabble = new Scrabble("{[d]og}");
