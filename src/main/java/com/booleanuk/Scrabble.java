@@ -50,13 +50,13 @@ public class Scrabble {
 
 
         char[] charArray = word.toUpperCase().toCharArray();
-        int totalScore = 0;
+        int points = 0;
 
         for (int i = 0; i < charArray.length; i++) {
             int value = letterValues.get(charArray[i]);
-            totalScore += value;
+            points += value;
         }
 
-        return totalScore;
+        return points;
     }
 }
