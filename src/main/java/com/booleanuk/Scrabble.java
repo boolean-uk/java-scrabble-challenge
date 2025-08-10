@@ -1,11 +1,10 @@
 package com.booleanuk;
 
-import com.sun.source.tree.ArrayTypeTree;
 
 import java.util.*;
 
 public class Scrabble {
-    private String word;
+    private final String word;
 
     public Scrabble(String word) {
         this.word = word;
@@ -17,14 +16,15 @@ public class Scrabble {
             return 0;
 
         //Tildeler poeng til vær bokstav
-        ArrayList<Character> group1 = new ArrayList<>(List.of('A','E','I','U','O','U','L','N','R','S','T'));
-        ArrayList<Character> group2 = new ArrayList<>(List.of('D', 'G'));
-        ArrayList<Character> group3 = new ArrayList<>(List.of('B', 'C', 'M', 'P'));
-        ArrayList<Character> group4 = new ArrayList<>(List.of('F', 'H', 'V', 'W', 'Y'));
-        ArrayList<Character> group5 =  new ArrayList<>(List.of('K'));
-        ArrayList<Character> group8 =  new ArrayList<>(List.of('J', 'X'));
-        ArrayList<Character> group10 = new ArrayList<>(List.of('Q', 'Z'));
-        ArrayList<Character> group11 = new ArrayList<>(List.of('{', '}','[',']'));
+        List<Character> group1 =List.of('A','E','I','U','O','U','L','N','R','S','T');
+        List<Character>group2 = List.of('D', 'G');
+        List<Character> group3 =List.of('B', 'C', 'M', 'P');
+        List<Character> group4 =List.of('F', 'H', 'V', 'W', 'Y');
+        List<Character> group5 =  List.of('K');
+        List<Character> group8 = List.of('J', 'X');
+        List<Character> group10 =List.of('Q', 'Z');
+        List<Character> group11 =List.of('{', '}','[',']');
+        List<Character> group12 =List.of('!','|','#');
 
         HashMap<Character,Integer> map = new HashMap<>();
         group1.forEach(x-> map.put(x,1));
@@ -38,14 +38,60 @@ public class Scrabble {
         int count = 0;
         //Deler opp word i bokstaver
        char[] bokstaver = this.word.toUpperCase().toCharArray();
+       HashMap<Character,Integer> bracketMap = new HashMap<>();
 
-        //Beregner poeng basert på bokstav
-        int sum = 0;
-        for (int i = 0; i < bokstaver.length; i++) {
-            sum += map.get(bokstaver[i]);
+        for (int i = 0; i<bokstaver.length; i++) {
+            if (group11.contains(bokstaver[i])) {
+                count++;
+                bracketMap.put(bokstaver[i],i);
+            }
+            if (group12.contains(bokstaver[i]))
+                return 0;
         }
 
+        //If brackets aren't matching
+        if(count%2 != 0) return 0;
+        //If positioning of brackets are wrong
+        try {
+            if(bracketMap.get('{')!= 0 && bracketMap.get('}')-bracketMap.get('{')!=2)
+                return 0;
+            if (bracketMap.get('}') < bracketMap.get('{') || bracketMap.get(']') < bracketMap.get('['))
+                return 0;
+        }catch (NullPointerException ignored){}
+
+        boolean doubleStart = false, tripleStart = false, doubleEnd = false, tripleEnd = false;
+        //Beregner poeng basert på bokstav
+        int sum = 0;
+        for (char c : bokstaver) {
+
+            if ((tripleStart && doubleEnd))
+                return 0;
+
+            if (c == '{') {
+                doubleStart = true;
+                doubleEnd = false;
+            }
+            if (c == '}') {
+                doubleEnd = true;
+                doubleStart = false;
+            }
+            if (c == '[') {
+                tripleStart = true;
+                tripleEnd = false;
+            }
+            if (c == ']') {
+                tripleEnd = true;
+                tripleStart = false;
+            }
+            if (doubleStart && !group11.contains(c)) {
+                map.replace(c, map.get(c) * 2);
+            }
+            if (tripleStart && !group11.contains(c)) {
+                map.replace(c, map.get(c) * 3);
+            }
+            if (!group11.contains(c))
+                sum += map.get(c);
+        }
         return sum;
     }
-
 }
